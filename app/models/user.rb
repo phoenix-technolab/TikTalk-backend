@@ -1,5 +1,4 @@
 class User < ApplicationRecord
-  # before_save :create_new_auth_token
   has_many :attachments, dependent: :destroy
 
   enum gender: [:male, :female]
