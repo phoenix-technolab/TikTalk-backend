@@ -16,6 +16,7 @@ class FindExistUserByPhoneNumber::VerifyPhoneNumber
   executed do |context|
     context.phone_number = MyRedis.client.get(context.code)
     next if context.phone_number.present?
+    
     context.fail_and_return!({ errors: "Incorect code" })
   end
 end
@@ -29,7 +30,9 @@ class FindExistUserByPhoneNumber::FindUser
     context.user = User.find_by(phone_number: context.phone_number)
     next if context.user.blank?
 
-    context.fail_and_return!({ blocked: "Your account has been blocked. For more info Contact Support" }) if context.user.present? && context.user.is_account_block.eql?(true)
+    if context.user.present? && context.user.is_account_block.eql?(true)
+      context.fail_and_return!({ blocked: "Your account has been blocked. For more info Contact Support" }) 
+    end
 
     if context.user.present?
       context.user.create_new_auth_token

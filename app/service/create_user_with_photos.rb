@@ -26,6 +26,7 @@ class CreateUserWithPhotos::AddImagesToUser
   expects :user, :images_params
   executed do |context|
     next if context.images_params[:images].blank?
+    
     context.images_params[:images].each do |image| 
       object = context.user.attachments.new(image: image)
       context.fail_and_return!({ errors: object.errors.full_messages }) unless object.save       
