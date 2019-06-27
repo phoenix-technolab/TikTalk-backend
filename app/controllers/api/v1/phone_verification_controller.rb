@@ -4,7 +4,7 @@ module Api
       skip_before_action :authentication!
       
       def send_code
-        result = SendVerifyCodeAndSaveInRedis.call(generate_code, check_params[:phone_number])
+        result = SendVerifyCodeAndSaveInRedis.call(check_params[:phone_number])
         if result.success?
           render json: { success: "Code successfully sended" }
         else
@@ -30,10 +30,6 @@ module Api
 
       def verify_params
         params.permit(:code)
-      end
-
-      def generate_code
-        rand(1000..9999)
       end
     end
   end

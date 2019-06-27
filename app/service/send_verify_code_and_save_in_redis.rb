@@ -1,9 +1,8 @@
 class SendVerifyCodeAndSaveInRedis
   extend LightService::Organizer
 
-  def self.call(code, user_phone_number)
-    with(code: code,
-         user_phone_number: user_phone_number).reduce(
+  def self.call(user_phone_number)
+    with(user_phone_number: user_phone_number).reduce(
           SendVerifyCodeAndSaveInRedis::SendCodeToUser,
           SendVerifyCodeAndSaveInRedis::StoreCodeInRedis
       )
@@ -12,19 +11,23 @@ end
 
 class SendVerifyCodeAndSaveInRedis::SendCodeToUser
   extend LightService::Action
-  expects :code, :user_phone_number
-
+  expects :user_phone_number
+  promises :code
   executed do |context|
     begin
       client = Twilio::REST::Client.new
       client.messages.create({
         from: ENV.fetch("TWILIO_PHONE_NUMBER"),
         to: context.user_phone_number,
-        body: "Your verification code #{context.code}"
+        body: "Your verification code #{context.code = self.generate_code}"
       })
     rescue Twilio::REST::TwilioError => e
       context.fail_and_return!(e.message)
     end
+  end
+
+  def self.generate_code
+    rand(1000..9999)
   end
 end
 
