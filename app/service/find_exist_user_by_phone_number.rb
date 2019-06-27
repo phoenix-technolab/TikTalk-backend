@@ -48,6 +48,6 @@ class FindExistUserByPhoneNumber::PhoneNumberVerifiedSuccess
 
   executed do |context|
     MyRedis.client.set(context.phone_number, true, { ex: 1.hour.to_i }) 
-    context.fail_and_return!({ message: "Phone number verified", status: 201 })
+    context.fail_and_return!({ message: "Phone number verified", status: 200 })
   end
 end

@@ -17,7 +17,7 @@ module Api
         if result.success?
           @user = result.user
           response.headers['Auth-token'] = result.user.tokens.last
-          render status: 200
+          render status: 201
         else
           render json: { message: result.message[:message] }, status: result.message[:status]
         end
