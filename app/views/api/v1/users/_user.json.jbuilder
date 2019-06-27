@@ -18,5 +18,6 @@ json.images do
     json.url                 image.image.url
   end
 end
+json.is_account_block user.is_account_block
 json.created_at      user.created_at
 json.updated_at      user.updated_at

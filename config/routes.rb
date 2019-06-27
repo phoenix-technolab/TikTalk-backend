@@ -11,7 +11,7 @@ Rails.application.routes.draw do
       
       resources :phone_verification, only: [] do
         collection do
-          get :send_code
+          post :send_code
           get :verify_code
         end
       end
