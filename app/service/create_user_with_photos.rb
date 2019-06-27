@@ -25,13 +25,10 @@ class CreateUserWithPhotos::AddImagesToUser
   extend LightService::Action
   expects :user, :images_params
   executed do |context|
-    if context.images_params[:images].present?
-      context.images_params[:images].each do |image| 
-        object = context.user.attachments.new(image: image)
-        unless object.save
-          context.fail_and_return!({ errors: object.errors.full_messages }) 
-        end
-      end
+    next if context.images_params[:images].blank?
+    context.images_params[:images].each do |image| 
+      object = context.user.attachments.new(image: image)
+      context.fail_and_return!({ errors: object.errors.full_messages }) unless object.save       
     end
   end
   

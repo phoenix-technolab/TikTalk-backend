@@ -19,7 +19,7 @@ class SendVerifyCodeAndSaveInRedis::SendCodeToUser
       client.messages.create({
         from: ENV.fetch("TWILIO_PHONE_NUMBER"),
         to: context.user_phone_number,
-        body: "Your verification code #{context.code = self.generate_code}"
+        body: "Your verification code #{context.code = generate_code}"
       })
     rescue Twilio::REST::TwilioError => e
       context.fail_and_return!(e.message)
