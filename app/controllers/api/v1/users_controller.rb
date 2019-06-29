@@ -24,7 +24,7 @@ module Api
 
       def sign_out
         token = current_user.tokens - [request.headers["Auth-token"]]
-        current_user.update(tokens: token)
+        current_user.update(tokens: token, firebase_token: nil)
       end
 
       private
