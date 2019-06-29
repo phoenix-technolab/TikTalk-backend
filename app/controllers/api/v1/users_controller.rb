@@ -1,14 +1,14 @@
 module Api
   module V1
     class UsersController < ApplicationController
-      skip_before_action :authentication!, only: [:create, :auth]
+      skip_before_action :authentication!, only: [:status_with_email, :auth]
       
-      def create
-        @user = User.new(user_params)
-        if @user.valid?
-          render json: { success: "User valid" }
+      def status_with_email
+        @user = User.new(email: user_params[:email])
+        if @user.email_valid?
+          render json: { code: 404, message: "User does not exist" }, status: 404
         else
-          render json: { errors: @user.errors }
+          render json: { result: "OK" }
         end
       end
 

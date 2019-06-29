@@ -3,9 +3,8 @@ class User < ApplicationRecord
 
   enum gender: [:male, :female]
 
-  validate :phone_number_verified
-  validates :email, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }, if: proc { email.present? }
-  validates :phone_number, presence: true
+  validates :gender, :email, :name, :birth_date, :country, :city, presence: true
+  validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }
 
   def create_new_auth_token
     new_token = generate_token
@@ -13,11 +12,8 @@ class User < ApplicationRecord
     new_token
   end
 
-  def phone_number_verified
-    verified_status = MyRedis.client.get(self.phone_number)
-    unless verified_status
-      self.errors.add(:phone_number, "Your phone number not verified")
-    end
+  def email_valid?
+    self.email.present? && User.where(email: self.email).blank?
   end
   
   private

@@ -2,8 +2,9 @@ Rails.application.routes.draw do
 
   namespace :api, path: '/' do
     namespace :v1 do
-      resources :users, only: [:create] do
+      resources :users, only: [] do
         collection do
+          get :status_with_email
           post :auth
           delete :sign_out
         end
