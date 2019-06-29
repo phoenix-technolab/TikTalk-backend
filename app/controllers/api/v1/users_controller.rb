@@ -18,7 +18,7 @@ module Api
           @user = result.user
           response.headers["Auth-token"] = @user.tokens.first
         else
-          render json: result.message
+          render json: { error: result.message[:errors] }, status: result.message[:status]
         end
       end
 
