@@ -21,6 +21,8 @@ Rails.application.routes.draw do
           put :update
         end
       end
+
+      resources :match_users, only: %I(index)
     end
   end
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html

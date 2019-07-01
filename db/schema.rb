@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_28_100338) do
+ActiveRecord::Schema.define(version: 2019_07_01_083429) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -45,6 +45,8 @@ ActiveRecord::Schema.define(version: 2019_06_28_100338) do
     t.integer "prefer_location_distance"
     t.boolean "is_show_in_app", default: true
     t.boolean "is_show_in_places", default: true
+    t.float "lat"
+    t.float "lng"
   end
 
   add_foreign_key "attachments", "users"
