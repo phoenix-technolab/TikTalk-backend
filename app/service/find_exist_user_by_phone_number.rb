@@ -30,14 +30,14 @@ class FindExistUserByPhoneNumber::FindUser
     context.user = User.find_by(phone_number: context.phone_number)
     next if context.user.blank?
 
-    if context.user.present? && context.user.is_account_block.eql?(true)
+    if context.user&.is_account_block
       context.fail_and_return!({ message: "Your account has been blocked. For more info Contact Support", status: 403 }) 
     end
 
     if context.user.present?
       context.user.create_new_auth_token
       context.user.save
-      context.skip_remaining!({})
+      context.skip_remaining!
     end
   end
 end

@@ -5,7 +5,8 @@ module Api
       
       def status_with_email
         @user = User.new(email: user_params[:email])
-        if @user.email_valid?
+        @user.valid?
+        if @user.errors[:email].blank?
           render json: { code: 404, message: "User does not exist" }, status: 404
         else
           render json: { result: "OK" }
@@ -23,7 +24,7 @@ module Api
       end
 
       def sign_out
-        token = current_user.tokens - [request.headers["Auth-token"]]
+        tokens = current_user.tokens - [request.headers["Auth-token"]]
         current_user.update(tokens: token, firebase_token: nil)
       end
 

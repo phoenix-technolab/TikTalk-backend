@@ -11,10 +11,6 @@ class User < ApplicationRecord
     self.tokens = tokens.push(new_token)
     new_token
   end
-
-  def email_valid?
-    self.email.present? && User.where(email: self.email).blank?
-  end
   
   private
 
