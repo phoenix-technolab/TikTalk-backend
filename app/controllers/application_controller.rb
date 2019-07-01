@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::API
-  before_action :authentication!
+  before_action :authentication!, :set_default_format
 
   def authentication!
     if current_user.blank?
@@ -10,4 +10,9 @@ class ApplicationController < ActionController::API
   def current_user
     @current_user ||= User.where("? = ANY (tokens)", request.headers["Auth-token"]).first
   end
+
+  def set_default_format
+    request.format = :json unless params[:format]
+  end
+  
 end

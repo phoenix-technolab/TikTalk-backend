@@ -15,10 +15,11 @@ module Api
       def verify_code
         result = FindExistUserByPhoneNumber.call(verify_params[:code])
         if result.success?
-          response.headers['Auth-token'] = result.user.tokens.first
-          render json: result.message 
+          @user = result.user
+          response.headers['Auth-token'] = result.user.tokens.last
+          render status: 201
         else
-          render json: result.message
+          render json: { message: result.message[:message] }, status: result.message[:status]
         end
       end
 

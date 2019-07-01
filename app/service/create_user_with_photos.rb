@@ -17,7 +17,7 @@ class CreateUserWithPhotos::CreateUser
   executed do |context|
     context.user = User.new(context.user_params)
     context.user.create_new_auth_token
-    context.fail_and_return!({ errors: context.user.errors }) unless context.user.save
+    context.fail_and_return!({ errors: context.user.errors, status: 422 }) unless context.user.save
   end
 end
 
@@ -29,7 +29,7 @@ class CreateUserWithPhotos::AddImagesToUser
     
     context.images_params[:images].each do |image| 
       object = context.user.attachments.new(image: image)
-      context.fail_and_return!({ errors: object.errors.full_messages }) unless object.save       
+      context.fail_and_return!({ errors: object.errors.full_messages, status: 422 }) unless object.save       
     end
   end
   

@@ -1,14 +1,15 @@
 module Api
   module V1
     class UsersController < ApplicationController
-      skip_before_action :authentication!, only: [:create, :auth]
+      skip_before_action :authentication!, only: [:status_with_email, :auth]
       
-      def create
-        @user = User.new(user_params)
-        if @user.valid?
-          render json: { success: "User valid" }
+      def status_with_email
+        @user = User.new(email: user_params[:email])
+        @user.valid?
+        if @user.errors[:email].blank?
+          render json: { code: 404, message: "User does not exist" }, status: 404
         else
-          render json: { errors: @user.errors }
+          render json: { result: "OK" }
         end
       end
 
@@ -18,13 +19,13 @@ module Api
           @user = result.user
           response.headers["Auth-token"] = @user.tokens.first
         else
-          render json: result.message
+          render json: { error: result.message[:errors] }, status: result.message[:status]
         end
       end
 
       def sign_out
-        token = current_user.tokens - [request.headers["Auth-token"]]
-        current_user.update(tokens: token)
+        tokens = current_user.tokens - [request.headers["Auth-token"]]
+        current_user.update(tokens: tokens, firebase_token: nil)
       end
 
       private

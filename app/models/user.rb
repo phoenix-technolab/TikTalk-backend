@@ -48,13 +48,6 @@ class User < ApplicationRecord
     self.tokens = tokens.push(new_token)
     new_token
   end
-
-  # def phone_number_verified
-  #   verified_status = MyRedis.client.get(self.phone_number)
-  #   unless verified_status
-  #     self.errors.add(:phone_number, "Your phone number not verified")
-  #   end
-  # end
   
   private
 
