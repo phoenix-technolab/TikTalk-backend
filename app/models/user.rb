@@ -1,6 +1,7 @@
 class User < ApplicationRecord
   acts_as_mappable default_units: :kms
   has_many :attachments, dependent: :destroy
+  has_one :profile, dependent: :destroy
 
   enum gender: [:male, :female]
 

@@ -1,4 +1,8 @@
 FactoryBot.define do
+  factory :profile do
+    
+  end
+
   factory :attachment do
     
   end
