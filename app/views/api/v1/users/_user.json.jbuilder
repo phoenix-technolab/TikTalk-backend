@@ -20,13 +20,13 @@ json.images do
 end
 json.is_account_block         user.is_account_block
 json.firebase_token           user.firebase_token
-json.prefer_gender_male       user.prefer_gender_male
-json.prefer_gender_female     user.prefer_gender_female
-json.prefer_min_age           user.prefer_min_age
-json.prefer_max_age           user.prefer_max_age
-json.prefer_location_distance user.prefer_location_distance        
-json.is_show_in_app           user.is_show_in_app
-json.is_show_in_places        user.is_show_in_places
+json.prefer_gender_male       user.profile.prefer_gender_male
+json.prefer_gender_female     user.profile.prefer_gender_female
+json.prefer_min_age           user.profile.prefer_min_age
+json.prefer_max_age           user.profile.prefer_max_age
+json.prefer_location_distance user.profile.prefer_location_distance        
+json.is_show_in_app           user.profile.is_show_in_app
+json.is_show_in_places        user.profile.is_show_in_places
 json.lat                      user.lat
 json.lng                      user.lng
 json.created_at               user.created_at
