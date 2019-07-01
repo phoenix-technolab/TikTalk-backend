@@ -250,6 +250,7 @@ DEPENDENCIES
   carrierwave-aws
   dotenv-rails
   factory_bot_rails
+  fcm
   geokit-rails
   jbuilder (~> 2.5)
   light-service

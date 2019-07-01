@@ -4,9 +4,9 @@ class User < ApplicationRecord
 
   enum gender: [:male, :female]
 
-  # validate :phone_number_verified
-  # validates :email, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }, if: proc { email.present? }
-  # validates :phone_number, presence: true
+  validates :gender, :email, :name, :birth_date, :country, :city, :phone_number, :code_country, presence: true
+  validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }
+
 
 
   scope :by_gender, lambda{ |current_user|
