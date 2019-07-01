@@ -10,6 +10,8 @@ gem 'sidekiq'
 gem 'carrierwave', '>= 2.0.0.rc', '< 3.0'
 gem 'carrierwave-aws'
 gem 'aws-sdk-s3'
+gem 'geokit-rails'
+
 
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'

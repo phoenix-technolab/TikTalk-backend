@@ -31,7 +31,8 @@ module Api
 
       def user_params
         params.permit(:email, :gender, :phone_number, :name,
-                      :code_country, :country, :city, :birth_date)
+                      :code_country, :country, :city, :birth_date,
+                      :lat, :lng)
       end
 
       def images_params
