@@ -13,17 +13,19 @@ class User < ApplicationRecord
     prefer_gender_male = current_user.profile.prefer_gender_male
     prefer_gender_female = current_user.profile.prefer_gender_female
     gender = current_user.gender
+
+    join_with_profile
     
     if prefer_gender_male && prefer_gender_female
-      join_with_profile.where("users.gender IN (0, 1) AND profiles.prefer_gender_#{gender} = ?", true)
+      where("users.gender IN (0, 1) AND profiles.prefer_gender_#{gender} = ?", true)
     elsif current_user.male? && prefer_gender_male
-      join_with_profile.where(gender: 0, profiles: { prefer_gender_male: true })
+      where(gender: 0, profiles: { prefer_gender_male: true })
     elsif current_user.female? && prefer_gender_female
-      join_with_profile.where(gender: 1, profiles: { prefer_gender_female: true })
+      where(gender: 1, profiles: { prefer_gender_female: true })
     elsif current_user.male? && prefer_gender_female
-      join_with_profile.where(gender:1, profiles: { prefer_gender_male: true })
+      where(gender:1, profiles: { prefer_gender_male: true })
     elsif current_user.female? && prefer_gender_male
-      join_with_profile.where(gender:0, profiles: { prefer_gender_female: true })   
+      where(gender:0, profiles: { prefer_gender_female: true })   
     end
   }
 
