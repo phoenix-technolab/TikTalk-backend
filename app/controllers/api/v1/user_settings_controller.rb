@@ -1,12 +1,12 @@
 module Api
   module V1
     class UserSettingsController < ApplicationController
+      ##TODO Reset dislikes
       def update
-        if current_user.update(user_settings_params)
-          @current_user = current_user
+        if current_user.profile.update(user_settings_params)
           render status: 200
         else
-          render json: { errors: @user.errors }, status: 422
+          render json: { errors: current_user.errors }, status: 422
         end 
       end
 
