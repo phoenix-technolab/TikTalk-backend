@@ -7,7 +7,7 @@ class User < ApplicationRecord
   enum gender: [:male, :female]
 
   validates :gender, :email, :name, :birth_date, :country, :city, :phone_number, :code_country, presence: true
-  validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }, uniqueness: true
+  validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }, uniqueness: { case_sensitive: false }
 
   scope :by_gender, lambda{ |current_user|
     prefer_gender_male = current_user.profile.prefer_gender_male
