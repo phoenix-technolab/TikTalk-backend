@@ -23,6 +23,12 @@ Rails.application.routes.draw do
         end
       end
 
+      resources :profiles, only: [] do
+        collection do
+          put :update
+        end
+      end
+
       resources :match_users, only: %I(index)
     end
   end

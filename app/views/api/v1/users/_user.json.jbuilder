@@ -27,6 +27,17 @@ json.prefer_max_age           user.profile.prefer_max_age
 json.prefer_location_distance user.profile.prefer_location_distance        
 json.is_show_in_app           user.profile.is_show_in_app
 json.is_show_in_places        user.profile.is_show_in_places
+json.work                     user.profile.work
+json.education                user.profile.education
+json.about_you                user.profile.about_you
+json.relationship             user.profile.relationship
+json.sexuality                user.profile.sexuality
+json.height                   user.profile.height
+json.living                   user.profile.living
+json.children                 user.profile.children
+json.smoking                  user.profile.smoking
+json.drinking                 user.profile.drinking
+json.speak                    user.profile.speak
 json.lat                      user.lat
 json.lng                      user.lng
 json.created_at               user.created_at
