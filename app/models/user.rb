@@ -5,7 +5,7 @@ class User < ApplicationRecord
   enum gender: [:male, :female]
 
   validates :gender, :email, :name, :birth_date, :country, :city, :phone_number, :code_country, presence: true
-  validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }
+  validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }, uniqueness: true
 
 
 
