@@ -4,7 +4,7 @@ module Api
       def update
         result = UserProfileUpdate.call(current_user, user_params, profile_params, update_attachment_params)
         if result.success?
-          @current_user = result.updated_user
+          @current_user = result.current_user
         else
           render json: { errors: result.message }, status: 422
         end
