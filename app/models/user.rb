@@ -9,8 +9,6 @@ class User < ApplicationRecord
   validates :gender, :email, :name, :birth_date, :country, :city, :phone_number, :code_country, presence: true
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }, uniqueness: true
 
-
-
   scope :by_gender, lambda{ |current_user|
     prefer_gender_male = current_user.profile.prefer_gender_male
     prefer_gender_female = current_user.profile.prefer_gender_female
@@ -46,12 +44,6 @@ class User < ApplicationRecord
   }
 
   scope :by_show_in_app, -> {  join_with_profile.where(profiles: { is_show_in_app: true }) }
-  
-
-  def create_user_profile
-    profile = Profile.create
-    profile.user_id = self.id
-  end
 
   def create_new_auth_token
     new_token = generate_token
