@@ -1,4 +1,8 @@
 FactoryBot.define do
+  factory :like do
+    
+  end
+
   factory :report do
     
   end

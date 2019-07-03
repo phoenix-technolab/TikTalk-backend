@@ -30,7 +30,11 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :match_users, only: %I(index)
+      resources :match_users, only: %I(index) do
+        collection do
+          post :preference
+        end
+      end
       
       resources :reports, only: %I(create)
       
