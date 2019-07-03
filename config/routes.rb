@@ -26,16 +26,12 @@ Rails.application.routes.draw do
       resources :profiles, only: [] do
         collection do
           put :update
+          get :instagram_connect
         end
       end
 
       resources :match_users, only: %I(index)
     
-      resources :instagrams, only: [] do
-        collection do
-          get :connect
-        end
-      end
     end
   end
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html

@@ -10,7 +10,20 @@ module Api
         end
       end
 
+      def instagram_connect
+        result = FetchInstagramPhotoUrl.call(current_user, instagram_params)
+        if result.success?
+          @current_user = result.current_user
+        else
+          render json: {errors: result.message}
+        end
+      end
+
       private
+
+      def instagram_params
+        params.permit(:access_token)
+      end
 
       def user_params
         params.permit(:name, :birth_date, :gender)
