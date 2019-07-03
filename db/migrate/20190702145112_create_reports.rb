@@ -3,7 +3,7 @@ class CreateReports < ActiveRecord::Migration[5.2]
     create_table :reports do |t|
       t.references :user, foreign_key: true
       t.column :report_type, :integer
-      t.column :receiver_id, :integer
+      t.references :receiver, foreign_key: { to_table: :users }
       t.timestamps
     end
   end

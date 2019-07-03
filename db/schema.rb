@@ -52,9 +52,10 @@ ActiveRecord::Schema.define(version: 2019_07_02_145112) do
   create_table "reports", force: :cascade do |t|
     t.bigint "user_id"
     t.integer "report_type"
-    t.integer "receiver_id"
+    t.bigint "receiver_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["receiver_id"], name: "index_reports_on_receiver_id"
     t.index ["user_id"], name: "index_reports_on_user_id"
   end
 
@@ -80,4 +81,5 @@ ActiveRecord::Schema.define(version: 2019_07_02_145112) do
   add_foreign_key "attachments", "users"
   add_foreign_key "profiles", "users"
   add_foreign_key "reports", "users"
+  add_foreign_key "reports", "users", column: "receiver_id"
 end
