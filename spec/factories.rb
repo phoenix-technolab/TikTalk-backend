@@ -1,4 +1,8 @@
 FactoryBot.define do
+  factory :report do
+    
+  end
+
   factory :profile do
     
   end

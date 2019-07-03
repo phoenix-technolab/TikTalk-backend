@@ -31,7 +31,9 @@ Rails.application.routes.draw do
       end
 
       resources :match_users, only: %I(index)
-    
+      
+      resources :reports, only: %I(create)
+      
     end
   end
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
