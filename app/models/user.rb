@@ -1,7 +1,11 @@
 class User < ApplicationRecord
   acts_as_mappable default_units: :kms
+
   has_many :attachments, dependent: :destroy
   has_one :profile, dependent: :destroy
+  has_many :reports
+  has_many :complaints, class_name: 'Report', foreign_key: 'receiver_id'
+
   after_create :create_profile
 
   enum gender: [:male, :female]
