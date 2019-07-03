@@ -32,8 +32,7 @@ Rails.application.routes.draw do
 
       resources :match_users, only: %I(index) do
         collection do
-          post :like
-          post :dislike
+          post :preference
         end
       end
       

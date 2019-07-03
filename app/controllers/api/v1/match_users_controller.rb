@@ -9,26 +9,18 @@ module Api
                      .by_show_in_app
       end
 
-      def like
-        @like = current_user.like_dislikes.new(receiver_id:vote_params[:receiver_id],  status: "like")
+      def preference
+        @preference = current_user.like_dislikes.new(vote_params)
 
-        unless @like.save
-          render json: { errors: @like.errors }
-        end
-      end
-
-      def dislike
-        @dislike = current_user.like_dislikes.new(receiver_id:vote_params[:receiver_id],  status: "dislike")
-
-        unless @dislike.save
-          render json: { errors: @dislike.errors }
+        unless @preference.save
+          render json: { errors: @preference.errors }
         end
       end
 
       private
 
       def vote_params
-        params.permit(:receiver_id)
+        params.permit(:receiver_id, :status)
       end
     end
   end
