@@ -26,6 +26,7 @@ Rails.application.routes.draw do
       resources :profiles, only: [] do
         collection do
           put :update
+          get :instagram_connect
         end
       end
 
