@@ -5,6 +5,8 @@ class User < ApplicationRecord
   has_one :profile, dependent: :destroy
   has_many :reports
   has_many :complaints, class_name: 'Report', foreign_key: 'receiver_id'
+  has_many :like_dislikes
+  has_many :receives, class_name: 'LikeDislike', foreign_key: 'receiver_id'
 
   after_create :create_profile
 

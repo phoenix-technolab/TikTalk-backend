@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_02_145112) do
+ActiveRecord::Schema.define(version: 2019_07_03_090646) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,6 +21,16 @@ ActiveRecord::Schema.define(version: 2019_07_02_145112) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_attachments_on_user_id"
+  end
+
+  create_table "like_dislikes", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "receiver_id"
+    t.integer "status", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["receiver_id"], name: "index_like_dislikes_on_receiver_id"
+    t.index ["user_id"], name: "index_like_dislikes_on_user_id"
   end
 
   create_table "profiles", force: :cascade do |t|
@@ -79,6 +89,8 @@ ActiveRecord::Schema.define(version: 2019_07_02_145112) do
   end
 
   add_foreign_key "attachments", "users"
+  add_foreign_key "like_dislikes", "users"
+  add_foreign_key "like_dislikes", "users", column: "receiver_id"
   add_foreign_key "profiles", "users"
   add_foreign_key "reports", "users"
   add_foreign_key "reports", "users", column: "receiver_id"
