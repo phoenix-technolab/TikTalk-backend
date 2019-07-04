@@ -13,13 +13,15 @@ module Api
        render json: { message: "No one new arround you" } if @users.blank?       
       end
 
-      ## Action for like/dislike user |||| TODO super like
+      ## Action for like/dislike user |||| TODO super like and push notification
       def preference
         result = ItsMatch.call(vote_params, current_user)
         
         if result.success?
           @preference = result.choice
-          render json: result.message if result.message.present?
+          if result.message.present?
+            render json: { user: result.message[:user], message: result.message[:message] }, status: result.message[:status] 
+          end
         else
           render json: result.message, status: 422
         end

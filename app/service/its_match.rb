@@ -5,6 +5,7 @@ class ItsMatch
          current_user: current_user).reduce(
           ItsMatch::SaveChoice,
           ItsMatch::UserMatches
+          # ItsMatch::SuperLikeNotification
       )
   end
 end
@@ -27,7 +28,7 @@ class ItsMatch::UserMatches
   expects :current_user, :choice
 
   executed do |context|
-    next if context.choice.dislike?
+    next if context.choice.dislike? || context.choice.super_like?
 
     sender_user_ids = User.joins(:like_dislikes)
                           .where("like_dislikes.receiver_id = #{context.current_user.id} 
@@ -35,6 +36,18 @@ class ItsMatch::UserMatches
     likes_user_matches = context.current_user.like_dislikes.where(receiver_id: sender_user_ids, status: "like")
     last_match_user = likes_user_matches.where(receiver_id: context.choice.receiver_id).last&.receiver
 
-    context.skip_remaining!({ user: last_match_user, message: "It`s match" }) if last_match_user.present?
+    context.skip_remaining!({ user: last_match_user, message: "It`s match", status: 201 }) if last_match_user.present?
   end
 end
+
+# class ItsMatch::SuperLikeNotification
+#   extend LightService::Action
+#   expects :choice
+
+#   executed do |context|
+#     if context.choice.super_like?
+#       receiver_token = context.choice.receiver.firebase_token
+#       Notifications::SendNotifications.call(receiver_token, )
+#     end
+#   end
+# end
