@@ -20,6 +20,7 @@ Rails.application.routes.draw do
       resources :user_settings, only: [] do
         collection do
           put :update
+          delete :reset_dislikes
         end
       end
 
