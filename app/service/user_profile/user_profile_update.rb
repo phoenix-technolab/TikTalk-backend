@@ -44,7 +44,7 @@ class UserProfile::UserProfileUpdate::UpdateUserPhotos
   end
 end
 
-class UserProfileUpdate::UpdateUserProfile
+class UserProfile::UserProfileUpdate::UpdateUserProfile
   extend LightService::Action
   expects :profile_params, :current_user
   promises :current_user

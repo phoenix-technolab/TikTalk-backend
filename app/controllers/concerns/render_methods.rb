@@ -1,6 +1,6 @@
 module RenderMethods
 
-  def render_error(object_error)
-    render json: object_error
+  def render_error(message, status = 400)
+    render json: { error: message }, status: status
   end
 end

@@ -1,7 +1,6 @@
 module Api
   module V1
     class MatchUsersController < ApplicationController
-
       def index
         @users = User.by_gender(current_user)
                      .where.not(id: current_user.id)

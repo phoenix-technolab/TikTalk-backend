@@ -3,20 +3,14 @@ module Api
     class ProfilesController < ApplicationController
       def update
         result = UserProfile::UserProfileUpdate.call(current_user, user_params, profile_params, update_attachment_params)
-        if result.success?
-          @current_user = result.current_user
-        else
-          render json: { errors: result.message }, status: 422
-        end
+        return render_error(result.message) unless result.success?
+        @current_user = result.current_user
       end
 
       def instagram_connect
         result = UserProfile::FetchInstagramPhotoUrl.call(current_user, instagram_params)
-        if result.success?
-          @current_user = result.current_user
-        else
-          render json: { errors: result.message }
-        end
+        return render_error(result.message) unless result.success?
+        @current_user = result.current_user
       end
 
       private
