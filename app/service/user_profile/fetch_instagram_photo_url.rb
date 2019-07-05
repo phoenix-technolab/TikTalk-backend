@@ -1,17 +1,17 @@
 require 'net/http'
 
-class FetchInstagramPhotoUrl
+class UserProfile::FetchInstagramPhotoUrl
   extend LightService::Organizer
   def self.call(current_user, instagram_params)
     with(current_user: current_user,
          instagram_params: instagram_params).reduce(
-      FetchInstagramPhotoUrl::CallInstagramApi,
-      FetchInstagramPhotoUrl::BuildData
+          UserProfile::FetchInstagramPhotoUrl::CallInstagramApi,
+          UserProfile::FetchInstagramPhotoUrl::BuildData
       )
   end
 end
 
-class FetchInstagramPhotoUrl::CallInstagramApi
+class UserProfile::FetchInstagramPhotoUrl::CallInstagramApi
   extend LightService::Action
   expects :instagram_params
   promises :response
@@ -26,7 +26,7 @@ class FetchInstagramPhotoUrl::CallInstagramApi
   end
 end
 
-class FetchInstagramPhotoUrl::BuildData
+class UserProfile::FetchInstagramPhotoUrl::BuildData
   extend LightService::Action
   expects :current_user, :response
   promises :current_user

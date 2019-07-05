@@ -1,15 +1,15 @@
-class FindExistUserByPhoneNumber
+class Registration::FindExistUserByPhoneNumber
   extend LightService::Organizer
   def self.call(code)
     with(code: code).reduce(
-          FindExistUserByPhoneNumber::VerifyPhoneNumber,
-          FindExistUserByPhoneNumber::FindUser,
-          FindExistUserByPhoneNumber::PhoneNumberVerifiedSuccess
+      Registration::FindExistUserByPhoneNumber::VerifyPhoneNumber,
+      Registration::FindExistUserByPhoneNumber::FindUser,
+      Registration::FindExistUserByPhoneNumber::PhoneNumberVerifiedSuccess
       )
   end
 end
 
-class FindExistUserByPhoneNumber::VerifyPhoneNumber
+class Registration::FindExistUserByPhoneNumber::VerifyPhoneNumber
   extend LightService::Action
   expects :code
   promises :phone_number
@@ -21,7 +21,7 @@ class FindExistUserByPhoneNumber::VerifyPhoneNumber
   end
 end
 
-class FindExistUserByPhoneNumber::FindUser
+class Registration::FindExistUserByPhoneNumber::FindUser
   extend LightService::Action
   expects :phone_number  
   promises :user
@@ -42,7 +42,7 @@ class FindExistUserByPhoneNumber::FindUser
   end
 end
 
-class FindExistUserByPhoneNumber::PhoneNumberVerifiedSuccess
+class Registration::FindExistUserByPhoneNumber::PhoneNumberVerifiedSuccess
   extend LightService::Action
   expects :phone_number
 

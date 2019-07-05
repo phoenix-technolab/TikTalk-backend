@@ -1,18 +1,18 @@
-class UserProfileUpdate
+class UserProfile::UserProfileUpdate
   extend LightService::Organizer
   def self.call(current_user, user_params, profile_params, attachment_params)
     with(current_user: current_user,
          user_params: user_params,
          profile_params: profile_params,
          attachment_params: attachment_params).reduce(
-          UserProfileUpdate::UpdateUser,
-          UserProfileUpdate::UpdateUserPhotos,
-          UserProfileUpdate::UpdateUserProfile
+          UserProfile::UserProfileUpdate::UpdateUser,
+          UserProfile::UserProfileUpdate::UpdateUserPhotos,
+          UserProfile::UserProfileUpdate::UpdateUserProfile
       )
   end
 end
 
-class UserProfileUpdate::UpdateUser
+class UserProfile::UserProfileUpdate::UpdateUser
   extend LightService::Action
   expects :current_user, :user_params
   promises :current_user
@@ -25,7 +25,7 @@ class UserProfileUpdate::UpdateUser
 
 end
 
-class UserProfileUpdate::UpdateUserPhotos
+class UserProfile::UserProfileUpdate::UpdateUserPhotos
   extend LightService::Action
   expects :attachment_params, :current_user
   promises :current_user
@@ -44,7 +44,7 @@ class UserProfileUpdate::UpdateUserPhotos
   end
 end
 
-class UserProfileUpdate::UpdateUserProfile
+class UserProfile::UserProfileUpdate::UpdateUserProfile
   extend LightService::Action
   expects :profile_params, :current_user
   promises :current_user

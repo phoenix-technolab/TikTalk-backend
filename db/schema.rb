@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_03_090646) do
+ActiveRecord::Schema.define(version: 2019_07_04_075022) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -86,6 +86,7 @@ ActiveRecord::Schema.define(version: 2019_07_03_090646) do
     t.string "firebase_token"
     t.float "lat"
     t.float "lng"
+    t.boolean "can_reset", default: false
   end
 
   add_foreign_key "attachments", "users"

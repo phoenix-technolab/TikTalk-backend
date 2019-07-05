@@ -20,6 +20,7 @@ Rails.application.routes.draw do
       resources :user_settings, only: [] do
         collection do
           put :update
+          delete :reset_dislikes
         end
       end
 
@@ -33,6 +34,7 @@ Rails.application.routes.draw do
       resources :match_users, only: %I(index) do
         collection do
           post :preference
+          delete :reset_last
         end
       end
       

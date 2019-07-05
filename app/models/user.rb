@@ -43,7 +43,7 @@ class User < ApplicationRecord
     where("date_part('year', age(birth_date)) >= ? AND date_part('year', age(birth_date)) <= ?", min_age, max_age)
   }
 
-  scope :by_distance, lambda{ |current_user|
+  scope :by_distance_to_user, lambda{ |current_user|
     prefer_location_distance_in_miles = current_user.profile.prefer_location_distance * 0.621371
     lat = current_user.lat
     lng = current_user.lng
@@ -53,12 +53,25 @@ class User < ApplicationRecord
 
   scope :by_show_in_app, -> {  join_with_profile.where(profiles: { is_show_in_app: true }) }
 
+  scope :no_display_reported_users, lambda{ |current_user| 
+    array_receiver_ids = Report.where(user_id: current_user.id).pluck(:receiver_id)
+    where.not(id: array_receiver_ids) 
+  }
+
+  scope :no_display_liked_or_disliked, lambda{ |current_user|
+    array_receiver_ids = LikeDislike.where(user_id: current_user.id).pluck(:receiver_id)
+    where.not(id:[array_receiver_ids])
+  }
   def create_new_auth_token
     new_token = generate_token
     self.tokens = tokens.push(new_token)
     new_token
   end
-  
+
+  def allow_reset!(status)
+    self.update(can_reset: status)
+  end
+
   private
 
   def generate_token

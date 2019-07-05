@@ -6,5 +6,5 @@ class LikeDislike < ApplicationRecord
   validates_uniqueness_of :user_id, scope: :receiver_id
 
 
-  enum status: %I(nothing like dislike)
+  enum status: %I(nothing dislike like super_like)
 end

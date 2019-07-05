@@ -1,15 +1,15 @@
-class SendVerifyCodeAndSaveInRedis
+class Registration::SendVerifyCodeAndSaveInRedis
   extend LightService::Organizer
 
   def self.call(user_phone_number)
     with(user_phone_number: user_phone_number).reduce(
-          SendVerifyCodeAndSaveInRedis::SendCodeToUser,
-          SendVerifyCodeAndSaveInRedis::StoreCodeInRedis
+      Registration::SendVerifyCodeAndSaveInRedis::SendCodeToUser,
+      Registration::SendVerifyCodeAndSaveInRedis::StoreCodeInRedis
       )
   end
 end
 
-class SendVerifyCodeAndSaveInRedis::SendCodeToUser
+class Registration::SendVerifyCodeAndSaveInRedis::SendCodeToUser
   extend LightService::Action
   expects :user_phone_number
   promises :code
@@ -31,7 +31,7 @@ class SendVerifyCodeAndSaveInRedis::SendCodeToUser
   end
 end
 
-class SendVerifyCodeAndSaveInRedis::StoreCodeInRedis
+class Registration::SendVerifyCodeAndSaveInRedis::StoreCodeInRedis
   extend LightService::Action
   expects :code, :user_phone_number
 
