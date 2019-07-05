@@ -67,7 +67,11 @@ class User < ApplicationRecord
     self.tokens = tokens.push(new_token)
     new_token
   end
-  
+
+  def allow_reset!(status)
+    self.update(can_reset: status)
+  end
+
   private
 
   def generate_token

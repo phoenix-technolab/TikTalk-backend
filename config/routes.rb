@@ -34,7 +34,7 @@ Rails.application.routes.draw do
       resources :match_users, only: %I(index) do
         collection do
           post :preference
-          get :reset_last
+          delete :reset_last
         end
       end
       

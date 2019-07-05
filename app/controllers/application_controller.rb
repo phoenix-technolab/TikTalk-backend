@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::API
+  include RenderMethods
   before_action :authentication!, :set_default_format
 
   def authentication!

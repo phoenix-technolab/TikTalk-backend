@@ -1,16 +1,16 @@
-class ItsMatch
+class Choices::ItsMatch
   extend LightService::Organizer
   def self.call(vote_params, current_user)
     with(vote_params: vote_params,
          current_user: current_user).reduce(
-          ItsMatch::SaveChoice,
-          ItsMatch::UserMatches
-          # ItsMatch::SuperLikeNotification
+          Choices::ItsMatch::SaveChoice,
+          Choices::ItsMatch::UserMatches,
+          ItsMatch::SuperLikeNotification
       )
   end
 end
 
-class ItsMatch::SaveChoice
+class Choices::ItsMatch::SaveChoice
   extend LightService::Action
   expects :vote_params, :current_user
   promises :choice
@@ -19,28 +19,23 @@ class ItsMatch::SaveChoice
     unless context.choice.save
       context.fail_and_return!(context.choice.errors)
     end
-    context.current_user.update(can_reset: true)
+    context.current_user.allow_reset!(true)
   end
 end
 
-class ItsMatch::UserMatches
+class Choices::ItsMatch::UserMatches
   extend LightService::Action
   expects :current_user, :choice
 
   executed do |context|
     next if context.choice.dislike? || context.choice.super_like?
 
-    sender_user_ids = User.joins(:like_dislikes)
-                          .where("like_dislikes.receiver_id = #{context.current_user.id} 
-                                  AND like_dislikes.status = 2").ids
-    likes_user_matches = context.current_user.like_dislikes.where(receiver_id: sender_user_ids, status: "like")
-    last_match_user = likes_user_matches.where(receiver_id: context.choice.receiver_id).last&.receiver
-
-    context.skip_remaining!({ user: last_match_user, message: "It`s match", status: 201 }) if last_match_user.present?
+    match_user = context.choice.receiver.like_dislikes.where(receiver_id: context.current_user.id)
+    context.skip_remaining!({ user: match_user, message: "It`s match", status: 201 }) if match_user.present?
   end
 end
 
-class ItsMatch::SuperLikeNotification
+class Choices::ItsMatch::SuperLikeNotification
   extend LightService::Action
   expects :choice
 

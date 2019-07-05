@@ -4,7 +4,7 @@ module Api
       skip_before_action :authentication!
       
       def send_code
-        result = SendVerifyCodeAndSaveInRedis.call(check_params[:phone_number])
+        result = Registration::SendVerifyCodeAndSaveInRedis.call(check_params[:phone_number])
         if result.success?
           render json: { success: "Code successfully sended" }
         else
@@ -13,7 +13,7 @@ module Api
       end
 
       def verify_code
-        result = FindExistUserByPhoneNumber.call(verify_params[:code])
+        result = Registration::FindExistUserByPhoneNumber.call(verify_params[:code])
         if result.success?
           @user = result.user
           response.headers['Auth-token'] = result.user.tokens.last

@@ -1,6 +1,7 @@
 module Api
   module V1
     class MatchUsersController < ApplicationController
+
       def index
         @users = User.by_gender(current_user)
                      .where.not(id: current_user.id)
@@ -15,12 +16,14 @@ module Api
 
       ## Action for like/dislike user |||| TODO super like and push notification
       def preference
-        result = ItsMatch.call(vote_params, current_user)
+        result = Choices::ItsMatch.call(vote_params, current_user)
         
         if result.success?
           @preference = result.choice
           if result.message.present?
-            render json: { user: result.message[:user], message: result.message[:message] }, status: result.message[:status] 
+            render json: { user: result.message[:user], 
+                           message: result.message[:message] }, 
+                           status: result.message[:status] 
           end
         else
           render json: result.message, status: 422
@@ -30,9 +33,9 @@ module Api
       def reset_last
         if current_user.can_reset
           @receiver = current_user.like_dislikes.last&.receiver
-          render json: { errors: "Can not find" }  if @receiver.blank?
+          return render_error({ errors: "Can not find" })  if @receiver.blank?
           current_user.like_dislikes.last.destroy
-          current_user.update(can_reset: false)
+          current_user.allow_reset!(false)
         else
           render json: { message: "You can`t reset users twice" }, status: 403
         end
