@@ -32,7 +32,7 @@ module Notifications
           priority: 'high',
           notification: {
               title: 'TikTalk',
-              body: 'Test'
+              body: context.params
           },
           data: {}
         })

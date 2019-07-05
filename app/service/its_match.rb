@@ -40,14 +40,17 @@ class ItsMatch::UserMatches
   end
 end
 
-# class ItsMatch::SuperLikeNotification
-#   extend LightService::Action
-#   expects :choice
+class ItsMatch::SuperLikeNotification
+  extend LightService::Action
+  expects :choice
 
-#   executed do |context|
-#     if context.choice.super_like?
-#       receiver_token = context.choice.receiver.firebase_token
-#       Notifications::SendNotifications.call(receiver_token, )
-#     end
-#   end
-# end
+  executed do |context|
+
+    next if context.choice.dislike?
+
+    receiver_firebase_token = context.choice.receiver.firebase_token
+    opts = { message: "#{context.choice.user.name} send super-like to you" }
+    Notifications::SendNotifications.call(receiver_firebase_token, opts)
+    
+  end
+end
