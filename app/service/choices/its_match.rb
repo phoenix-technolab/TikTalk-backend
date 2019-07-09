@@ -5,7 +5,8 @@ class Choices::ItsMatch
          current_user: current_user).reduce(
           Choices::ItsMatch::SaveChoice,
           Choices::ItsMatch::UserMatches,
-          ItsMatch::SuperLikeNotification
+          Choices::ItsMatch::ItsMatchNotification,
+          Choices::ItsMatch::SuperLikeNotification
       )
   end
 end
@@ -14,6 +15,7 @@ class Choices::ItsMatch::SaveChoice
   extend LightService::Action
   expects :vote_params, :current_user
   promises :choice
+
   executed do |context|
     context.choice = context.current_user.like_dislikes.new(context.vote_params)
     unless context.choice.save
@@ -22,16 +24,32 @@ class Choices::ItsMatch::SaveChoice
     context.current_user.allow_reset!(true)
   end
 end
-
+## TODO Add like notification
 class Choices::ItsMatch::UserMatches
   extend LightService::Action
   expects :current_user, :choice
+  promises :match_user
 
   executed do |context|
     next if context.choice.dislike? || context.choice.super_like?
 
-    match_user = context.choice.receiver.like_dislikes.where(receiver_id: context.current_user.id)
-    context.skip_remaining!({ user: match_user, message: "It`s match", status: 201 }) if match_user.present?
+    context.match_user = context.choice.receiver.like_dislikes.where(receiver_id: context.current_user.id, status: "like")
+  end
+end
+
+class Choices::ItsMatch::ItsMatchNotification
+  extend LightService::Action
+  expects :match_user, :choice
+
+  executed do |context|
+    next if context.choice.dislike? || context.choice.super_like?
+
+    if context.match_user.present?
+      receiver_firebase_token = context.choice.receiver.firebase_token
+      opts = { message: "You with #{context.choice.user.name} matched!" }
+      Notifications::SendNotifications.call(receiver_firebase_token, opts)
+      context.skip_remaining!({ user:context.match_user, message: "It`s match", status: 201 })
+    end
   end
 end
 
@@ -40,12 +58,10 @@ class Choices::ItsMatch::SuperLikeNotification
   expects :choice
 
   executed do |context|
-
     next if context.choice.dislike?
 
     receiver_firebase_token = context.choice.receiver.firebase_token
     opts = { message: "#{context.choice.user.name} send super-like to you" }
-    Notifications::SendNotifications.call(receiver_firebase_token, opts)
-    
+    Notifications::SendNotifications.call(receiver_firebase_token, opts) 
   end
 end

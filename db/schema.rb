@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_04_075022) do
+ActiveRecord::Schema.define(version: 2019_07_06_161907) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -56,6 +56,7 @@ ActiveRecord::Schema.define(version: 2019_07_04_075022) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "instagram_photos_url", default: [], array: true
+    t.string "twilio_user_id", default: ""
     t.index ["user_id"], name: "index_profiles_on_user_id"
   end
 
