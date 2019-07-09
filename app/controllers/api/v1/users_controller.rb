@@ -29,6 +29,11 @@ module Api
         current_user.update(tokens: tokens, firebase_token: nil)
       end
 
+      def delete_account
+        User.find(current_user.id).destroy
+        render json: { message: "Account successfuly deleted" }
+      end
+
       def twilio_user
         begin
           @twilio_user = twilio_service.users.create(identity: current_user.email)

@@ -9,6 +9,7 @@ Rails.application.routes.draw do
           delete :sign_out
           post :twilio_user
           post :twilio_token
+          delete :delete_account
         end
       end
       
