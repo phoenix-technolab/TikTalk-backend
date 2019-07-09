@@ -6,6 +6,6 @@ module TwilioMethods
   private
 
   def twilio_client
-    @client = Twilio::REST::Client.new
+    @client ||= Twilio::REST::Client.new
   end
 end

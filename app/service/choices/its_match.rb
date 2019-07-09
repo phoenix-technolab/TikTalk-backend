@@ -6,6 +6,8 @@ class Choices::ItsMatch
           Choices::ItsMatch::SaveChoice,
           Choices::ItsMatch::LikeNotification,
           Choices::ItsMatch::UserMatches,
+          Choices::ItsMatch::CreateChatroom,
+          Choices::ItsMatch::AddMembersToChat,
           Choices::ItsMatch::ItsMatchNotification,
           Choices::ItsMatch::SuperLikeNotification
       )
@@ -47,8 +49,46 @@ class Choices::ItsMatch::UserMatches
   executed do |context|
     context.match_user = nil
     next if context.choice.dislike? || context.choice.super_like?
-
+    
     context.match_user = context.choice.receiver.like_dislikes.where(receiver_id: context.current_user.id, status: "like").last
+  end
+end
+
+class Choices::ItsMatch::CreateChatroom
+  extend TwilioMethods
+  extend LightService::Action
+  expects :choice, :match_user
+  promises :channel_sid
+  executed do |context|
+    context.channel_sid=nil
+
+    next if context.match_user.blank?
+
+    begin
+      channel = twilio_service.channels.create(friendly_name: "Chat between #{context.choice.user.email} and #{context.choice.receiver.email}",
+                                               created_by: context.choice.user.email,
+                                               type: "private")
+      context.channel_sid = channel.sid
+    rescue Twilio::REST::RestError => e
+      context.fail_and_return!(e.message)
+    end
+  end
+end
+
+class Choices::ItsMatch::AddMembersToChat
+  extend TwilioMethods
+  extend LightService::Action
+  expects :channel_sid, :match_user, :choice
+
+  executed do |context|
+    next if context.channel_sid.blank?
+
+    begin
+      twilio_service.channels(context.channel_sid).members.create(identity: context.choice.user.email)
+      twilio_service.channels(context.channel_sid).members.create(identity: context.choice.receiver.email)
+    rescue Twilio::REST::RestError => e
+      context.fail_and_return!(e.message)
+    end
   end
 end
 
@@ -57,14 +97,13 @@ class Choices::ItsMatch::ItsMatchNotification
   expects :match_user, :choice
 
   executed do |context|
-    next if context.choice.dislike? || context.choice.super_like?
 
-    if context.match_user.present?
-      receiver_firebase_token = context.choice.receiver.firebase_token
-      opts = { message: "You with #{context.choice.user.name} matched!" }
-      Notifications::SendNotifications.call(receiver_firebase_token, opts)
-      context.skip_remaining!({ user: context.match_user.user, message: "It`s match", status: 201 })
-    end
+    next if context.match_user.blank?
+
+    receiver_firebase_token = context.choice.receiver.firebase_token
+    opts = { message: "You with #{context.choice.user.name} matched!" }
+    Notifications::SendNotifications.call(receiver_firebase_token, opts)
+    context.skip_remaining!({ user: context.match_user.user, message: "It`s match", status: 201 })
   end
 end
 

@@ -30,8 +30,7 @@ module Api
       end
 
       def delete_account
-        User.find(current_user.id).destroy
-        render json: { message: "Account successfuly deleted" }
+        current_user.destroy
       end
 
       def twilio_user
@@ -39,7 +38,7 @@ module Api
           @twilio_user = twilio_service.users.create(identity: current_user.email)
           current_user.profile.update(twilio_user_id: @twilio_user.sid)
         rescue Twilio::REST::RequestError => e
-          render json: { error: e.message }
+          render_error(e.message)
         end
       end
 
