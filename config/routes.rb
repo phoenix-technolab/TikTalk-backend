@@ -7,6 +7,9 @@ Rails.application.routes.draw do
           get :status_with_email
           post :auth
           delete :sign_out
+          post :twilio_user
+          post :twilio_token
+          delete :delete_account
         end
       end
       
@@ -39,6 +42,7 @@ Rails.application.routes.draw do
       end
       
       resources :reports, only: %I(create)
+      resources :channels, only: %I(index)
       
     end
   end

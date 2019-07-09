@@ -1,6 +1,7 @@
 module Api
   module V1
     class UsersController < ApplicationController
+      include TwilioMethods
       skip_before_action :authentication!, only: [:status_with_email, :auth]
       
       def status_with_email
@@ -26,6 +27,32 @@ module Api
       def sign_out
         tokens = current_user.tokens - [request.headers["Auth-token"]]
         current_user.update(tokens: tokens, firebase_token: nil)
+      end
+
+      def delete_account
+        current_user.destroy
+      end
+
+      def twilio_user
+        begin
+          @twilio_user = twilio_service.users.create(identity: current_user.email)
+          current_user.profile.update(twilio_user_id: @twilio_user.sid)
+        rescue Twilio::REST::RequestError => e
+          render_error(e.message)
+        end
+      end
+
+      def twilio_token
+        grant = Twilio::JWT::AccessToken::ChatGrant.new
+        grant.service_sid = ENV.fetch("TWILIO_SERVICE_SID")
+        token = Twilio::JWT::AccessToken.new(
+          ENV.fetch("TWILIO_ACCOUNT_SID"),
+          ENV.fetch("TWILIO_API_KEY"),
+          ENV.fetch("TWILIO_API_SECRET"),
+          [grant],
+          identity: current_user.email
+        )
+        render json: { token: token.to_jwt }
       end
 
       private
