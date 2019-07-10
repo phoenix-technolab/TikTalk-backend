@@ -88,10 +88,8 @@ class Choices::ItsMatch::ReturnUserObjectOnMatch
 
   executed do |context|
     next if context.match_user.blank? || context.choice.dislike? || context.choice.super_like?
-
-    context.skip_remaining!({ user: context.match_user.user,
-                              images: context.match_user.user.attachments,
-                message: "It`s match", status: 201 })
+  
+    context.skip_remaining!({ user: context.match_user.user })
   end
 
 end
