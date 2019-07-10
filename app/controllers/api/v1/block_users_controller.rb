@@ -11,6 +11,7 @@ module Api
         @block = current_user.block_users.find_by(block_params)
         render_error unless @block.update(is_block: params[:is_block])
       end
+      
       private
 
       def block_params

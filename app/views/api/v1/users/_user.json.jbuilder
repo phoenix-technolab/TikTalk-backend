@@ -40,6 +40,7 @@ json.children                 user.profile.children
 json.smoking                  user.profile.smoking
 json.drinking                 user.profile.drinking
 json.speak                    user.profile.speak
+json.notifications            user.profile.notifications
 json.lat                      user.lat
 json.lng                      user.lng
 json.created_at               user.created_at

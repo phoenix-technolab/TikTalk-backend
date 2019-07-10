@@ -20,7 +20,8 @@ module Api
         if result.success?
           @preference = result.choice
           if result.message.present?
-            render json: { user: result.message[:user], 
+            render json: { user: result.message[:user],
+                           images:result.message[:images],
                            message: result.message[:message] }, 
                            status: result.message[:status] 
           end
