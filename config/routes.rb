@@ -43,6 +43,7 @@ Rails.application.routes.draw do
       
       resources :reports, only: %I(create)
       resources :channels, only: %I(index)
+      resources :block_users, only: %I(create)
       
     end
   end

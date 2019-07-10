@@ -1,4 +1,8 @@
 FactoryBot.define do
+  factory :block_user do
+    
+  end
+
   factory :like do
     
   end
