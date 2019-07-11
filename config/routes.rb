@@ -42,11 +42,7 @@ Rails.application.routes.draw do
       end
       
       resources :reports, only: %I(create)
-      resources :block_users, only: %I(create) do
-        collection do
-          put :update
-        end
-      end
+      resources :block_users, only: %I(create destroy)
       
     end
   end

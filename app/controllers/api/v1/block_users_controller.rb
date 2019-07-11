@@ -7,7 +7,7 @@ module Api
       end
       
       def destroy
-        current_user.block_users.find_by(receiver_id: block_params[:receiver_id])&.destroy
+        current_user.block_users.find_by(receiver_id: params[:id])&.destroy
       end
 
       private
