@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_10_111816) do
+ActiveRecord::Schema.define(version: 2019_07_11_120914) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -26,7 +26,6 @@ ActiveRecord::Schema.define(version: 2019_07_10_111816) do
   create_table "block_users", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "receiver_id"
-    t.boolean "is_block", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["receiver_id"], name: "index_block_users_on_receiver_id"

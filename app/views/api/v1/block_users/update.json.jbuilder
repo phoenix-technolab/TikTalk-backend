@@ -1,1 +1,0 @@
-json.partial! "block_user", block: @block

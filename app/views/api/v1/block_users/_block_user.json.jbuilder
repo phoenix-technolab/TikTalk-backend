@@ -6,6 +6,5 @@ end
 json.id          block.id
 json.user_id     block.user_id
 json.receiver_id block.receiver_id
-json.is_block    block.is_block
 json.created_at  block.created_at
 json.updated_at  block.updated_at
