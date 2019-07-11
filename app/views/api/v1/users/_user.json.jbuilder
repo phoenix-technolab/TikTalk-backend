@@ -3,7 +3,6 @@ expected_locals.each do |local|
   raise("_user expects local #{local}") unless binding.local_variable_get(local)
 end
 
-json.user do
   json.id                       user.id
   json.email                    user.email
   json.name                     user.name
@@ -46,4 +45,3 @@ json.user do
   json.lng                      user.lng
   json.created_at               user.created_at
   json.updated_at               user.updated_at
-end

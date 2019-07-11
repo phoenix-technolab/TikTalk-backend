@@ -20,8 +20,8 @@ module Api
         if result.success? 
           return render json: { success: true, user: nil } if result.message.blank?
 
-          render partial: "/api/v1/users/user", locals: { user: result.message[:user] }, 
-                                                          status: 201 
+          render partial: "/api/v1/match_users/its_match", locals: { user: result.message[:user] }, 
+                                                                     status: 201 
         else
           render json: result.message, status: 422
         end
