@@ -3,10 +3,6 @@ expected_locals.each do |local|
   raise("_user expects local #{local}") unless binding.local_variable_get(local)
 end
 
-if message.present?
-  json.success message
-end
-
 json.user do
   json.id                       user.id
   json.email                    user.email
