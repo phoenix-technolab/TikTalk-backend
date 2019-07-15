@@ -1,7 +1,10 @@
 class UserProfile::UserProfileUpdate
   extend LightService::Organizer
-  def self.call(current_user, user_params, profile_params, 
-                profile_notifications_params, attachment_params)
+  def self.call(current_user, 
+                user_params, 
+                profile_params, 
+                profile_notifications_params, 
+                attachment_params)
     with(current_user: current_user,
          user_params: user_params,
          profile_params: profile_params,

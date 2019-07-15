@@ -32,11 +32,13 @@ class Choices::ItsMatch::LikeNotification
   expects :choice, :current_user
 
   executed do |context|
-    
-    if context.choice.dislike? || context.choice.super_like? || (!context.choice.receiver.profile.notifications["like_you"] || context.choice.receiver.profile.notifications["pause_all"])
-      next
-    end
+    ## If user liked someone and receiver have enable notifications or turn off all
 
+    next if context.choice.dislike? || 
+            context.choice.super_like? || 
+            (!context.choice.receiver.profile.notifications["like_you"] || 
+            context.choice.receiver.profile.notifications["pause_all"])
+      
     receiver_firebase_token = context.choice.receiver.firebase_token
     opts = { message: "Someone send like to you!" } 
     Notifications::SendNotifications.call(receiver_firebase_token, opts)
@@ -61,7 +63,11 @@ class Choices::ItsMatch::ItsMatchNotification
   expects :match_user, :choice
 
   executed do |context|
-    next if context.match_user.blank? || (!context.choice.receiver.profile.notifications["new_matches"] || context.choice.receiver.profile.notifications["pause_all"])
+    ## If user liked someone and they had match and receiver had enable notifications or turn off all
+
+    next if context.match_user.blank? || 
+            (!context.choice.receiver.profile.notifications["new_matches"] || 
+            context.choice.receiver.profile.notifications["pause_all"])
 
     receiver_firebase_token = context.choice.receiver.firebase_token
     opts = { message: "You with #{context.choice.user.name} matched!" }
@@ -74,7 +80,12 @@ class Choices::ItsMatch::SuperLikeNotification
   expects :choice
 
   executed do |context|
-    next if context.choice.dislike? || context.choice.like? || (!context.choice.receiver.profile.notifications["super_like"] || context.choice.receiver.profile.notifications["pause_all"])
+    ## If user super liked someone and receiver had enable notifications or turn off all
+
+    next if context.choice.dislike? || 
+            context.choice.like? || 
+            (!context.choice.receiver.profile.notifications["super_like"] || 
+            context.choice.receiver.profile.notifications["pause_all"])
 
     receiver_firebase_token = context.choice.receiver.firebase_token
     opts = { message: "#{context.choice.user.name} send super-like to you" }
