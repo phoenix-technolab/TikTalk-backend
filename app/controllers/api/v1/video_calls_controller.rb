@@ -16,13 +16,7 @@ module Api
       end
 
       def rooms
-        room = twilio_client.video.rooms.create(
-                                          enable_turn: true,
-                                          type: 'peer-to-peer',
-                                          unique_name: '3asda'
-                                        )
-        pp room
-
+          
       end
     end
   end

@@ -2,7 +2,7 @@ Rails.application.routes.draw do
 
   namespace :api, path: '/' do
     namespace :v1 do
-      resources :users, only: [] do
+      resources :users, only: %I(show) do
         collection do
           get :status_with_email
           post :auth
