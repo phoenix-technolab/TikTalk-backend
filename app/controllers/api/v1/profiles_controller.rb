@@ -2,7 +2,12 @@ module Api
   module V1
     class ProfilesController < ApplicationController
       def update
-        result = UserProfile::UserProfileUpdate.call(current_user, user_params, profile_params, update_attachment_params)
+        result = UserProfile::UserProfileUpdate.call(current_user, 
+                                                     user_params, 
+                                                     profile_params, 
+                                                     profile_notifications_params, 
+                                                     update_attachment_params)
+
         return render_error(result.message) unless result.success?
         @current_user = result.current_user
       end
@@ -21,6 +26,15 @@ module Api
 
       def user_params
         params.permit(:name, :birth_date, :gender)
+      end
+
+      def profile_notifications_params
+        params.require(:notifications).permit(:pause_all, 
+                                              :messages,
+                                              :new_matches, 
+                                              :like_you, 
+                                              :message_in_private_room, 
+                                              :super_like)
       end
 
       def profile_params

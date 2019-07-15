@@ -6,10 +6,9 @@ class Choices::ItsMatch
           Choices::ItsMatch::SaveChoice,
           Choices::ItsMatch::LikeNotification,
           Choices::ItsMatch::UserMatches,
-          Choices::ItsMatch::CreateChatroom,
-          Choices::ItsMatch::AddMembersToChat,
           Choices::ItsMatch::ItsMatchNotification,
-          Choices::ItsMatch::SuperLikeNotification
+          Choices::ItsMatch::SuperLikeNotification,
+          Choices::ItsMatch::ReturnUserObjectOnMatch
       )
   end
 end
@@ -33,10 +32,15 @@ class Choices::ItsMatch::LikeNotification
   expects :choice, :current_user
 
   executed do |context|
-    next if context.choice.dislike? || context.choice.super_like?
+    ## If user liked someone and receiver have enable notifications or turn off all
 
+    next if context.choice.dislike? || 
+            context.choice.super_like? || 
+            (!context.choice.receiver.profile.notifications["like_you"] || 
+            context.choice.receiver.profile.notifications["pause_all"])
+      
     receiver_firebase_token = context.choice.receiver.firebase_token
-    opts = { message: "Someone send like to you!" }
+    opts = { message: "Someone send like to you!" } 
     Notifications::SendNotifications.call(receiver_firebase_token, opts)
   end
 end
@@ -54,56 +58,20 @@ class Choices::ItsMatch::UserMatches
   end
 end
 
-class Choices::ItsMatch::CreateChatroom
-  extend TwilioMethods
-  extend LightService::Action
-  expects :choice, :match_user
-  promises :channel_sid
-  executed do |context|
-    context.channel_sid=nil
-
-    next if context.match_user.blank?
-
-    begin
-      channel = twilio_service.channels.create(friendly_name: "Chat between #{context.choice.user.email} and #{context.choice.receiver.email}",
-                                               created_by: context.choice.user.email,
-                                               type: "private")
-      context.channel_sid = channel.sid
-    rescue Twilio::REST::RestError => e
-      context.fail_and_return!(e.message)
-    end
-  end
-end
-
-class Choices::ItsMatch::AddMembersToChat
-  extend TwilioMethods
-  extend LightService::Action
-  expects :channel_sid, :match_user, :choice
-
-  executed do |context|
-    next if context.channel_sid.blank?
-
-    begin
-      twilio_service.channels(context.channel_sid).members.create(identity: context.choice.user.email)
-      twilio_service.channels(context.channel_sid).members.create(identity: context.choice.receiver.email)
-    rescue Twilio::REST::RestError => e
-      context.fail_and_return!(e.message)
-    end
-  end
-end
-
 class Choices::ItsMatch::ItsMatchNotification
   extend LightService::Action
   expects :match_user, :choice
 
   executed do |context|
+    ## If user liked someone and they had match and receiver had enable notifications or turn off all
 
-    next if context.match_user.blank?
+    next if context.match_user.blank? || 
+            (!context.choice.receiver.profile.notifications["new_matches"] || 
+            context.choice.receiver.profile.notifications["pause_all"])
 
     receiver_firebase_token = context.choice.receiver.firebase_token
     opts = { message: "You with #{context.choice.user.name} matched!" }
     Notifications::SendNotifications.call(receiver_firebase_token, opts)
-    context.skip_remaining!({ user: context.match_user.user, message: "It`s match", status: 201 })
   end
 end
 
@@ -112,10 +80,28 @@ class Choices::ItsMatch::SuperLikeNotification
   expects :choice
 
   executed do |context|
-    next if context.choice.dislike?
+    ## If user super liked someone and receiver had enable notifications or turn off all
+
+    next if context.choice.dislike? || 
+            context.choice.like? || 
+            (!context.choice.receiver.profile.notifications["super_like"] || 
+            context.choice.receiver.profile.notifications["pause_all"])
 
     receiver_firebase_token = context.choice.receiver.firebase_token
     opts = { message: "#{context.choice.user.name} send super-like to you" }
     Notifications::SendNotifications.call(receiver_firebase_token, opts) 
   end
 end
+
+class Choices::ItsMatch::ReturnUserObjectOnMatch
+  extend LightService::Action
+  expects :match_user, :choice
+
+  executed do |context|
+    next if context.match_user.blank? || context.choice.dislike? || context.choice.super_like?
+  
+    context.skip_remaining!({ user: context.match_user.user })
+  end
+
+end
+

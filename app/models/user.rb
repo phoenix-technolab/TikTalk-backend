@@ -7,6 +7,8 @@ class User < ApplicationRecord
   has_many :complaints, class_name: 'Report', foreign_key: 'receiver_id'
   has_many :like_dislikes
   has_many :receives, class_name: 'LikeDislike', foreign_key: 'receiver_id'
+  has_many :block_users
+  has_many :blocked_by, class_name: 'BlockUser', foreign_key: 'receiver_id'
 
   after_create :create_profile
 

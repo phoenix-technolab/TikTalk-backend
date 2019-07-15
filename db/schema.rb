@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_06_161907) do
+ActiveRecord::Schema.define(version: 2019_07_11_120914) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,6 +21,15 @@ ActiveRecord::Schema.define(version: 2019_07_06_161907) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_attachments_on_user_id"
+  end
+
+  create_table "block_users", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "receiver_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["receiver_id"], name: "index_block_users_on_receiver_id"
+    t.index ["user_id"], name: "index_block_users_on_user_id"
   end
 
   create_table "like_dislikes", force: :cascade do |t|
@@ -57,6 +66,7 @@ ActiveRecord::Schema.define(version: 2019_07_06_161907) do
     t.datetime "updated_at", null: false
     t.string "instagram_photos_url", default: [], array: true
     t.string "twilio_user_id", default: ""
+    t.json "notifications", default: {"pause_all"=>false, "messages"=>true, "new_matches"=>true, "like_you"=>true, "message_in_private_room"=>true, "super_like"=>true}
     t.index ["user_id"], name: "index_profiles_on_user_id"
   end
 
@@ -91,6 +101,8 @@ ActiveRecord::Schema.define(version: 2019_07_06_161907) do
   end
 
   add_foreign_key "attachments", "users"
+  add_foreign_key "block_users", "users"
+  add_foreign_key "block_users", "users", column: "receiver_id"
   add_foreign_key "like_dislikes", "users"
   add_foreign_key "like_dislikes", "users", column: "receiver_id"
   add_foreign_key "profiles", "users"

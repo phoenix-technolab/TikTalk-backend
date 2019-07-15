@@ -37,7 +37,7 @@ module Api
         begin
           @twilio_user = twilio_service.users.create(identity: current_user.email)
           current_user.profile.update(twilio_user_id: @twilio_user.sid)
-        rescue Twilio::REST::RequestError => e
+        rescue Twilio::REST::RestError => e
           render_error(e.message)
         end
       end

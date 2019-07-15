@@ -17,13 +17,11 @@ module Api
       def preference
         result = Choices::ItsMatch.call(vote_params, current_user)
         
-        if result.success?
-          @preference = result.choice
-          if result.message.present?
-            render json: { user: result.message[:user], 
-                           message: result.message[:message] }, 
-                           status: result.message[:status] 
-          end
+        if result.success? 
+          return render json: { success: true, user: nil } if result.message.blank?
+
+          render partial: "/api/v1/match_users/its_match", locals: { user: result.message[:user] }, 
+                                                                     status: 201 
         else
           render json: result.message, status: 422
         end
