@@ -14,10 +14,6 @@ module Api
 
         render json: { token: token.to_jwt }
       end
-
-      def rooms
-          
-      end
     end
   end
 end

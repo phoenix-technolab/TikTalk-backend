@@ -13,7 +13,6 @@ module Api
        render json: { message: "No one new arround you" } if @users.blank?       
       end
 
-      ## Action for like/dislike user |||| TODO super like and push notification
       def preference
         result = Choices::ItsMatch.call(vote_params, current_user)
         
