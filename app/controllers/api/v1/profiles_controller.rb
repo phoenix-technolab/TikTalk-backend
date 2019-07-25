@@ -29,12 +29,16 @@ module Api
       end
 
       def profile_notifications_params
-        params.require(:notifications).permit(:pause_all, 
-                                              :messages,
-                                              :new_matches, 
-                                              :like_you, 
-                                              :message_in_private_room, 
-                                              :super_like)
+        params.permit(
+          notifications:[
+            :pause_all,
+            :messages,
+            :new_matches,
+            :like_you,
+            :message_in_private_room,
+            :super_like
+          ]
+        )
       end
 
       def profile_params
