@@ -2,7 +2,7 @@ Rails.application.routes.draw do
 
   namespace :api, path: '/' do
     namespace :v1 do
-      resources :users, only: [] do
+      resources :users, only: %I(show) do
         collection do
           get :status_with_email
           post :auth
@@ -22,14 +22,14 @@ Rails.application.routes.draw do
 
       resources :user_settings, only: [] do
         collection do
-          put :update
+          patch :update
           delete :reset_dislikes
         end
       end
 
       resources :profiles, only: [] do
         collection do
-          put :update
+          patch :update
           get :instagram_connect
         end
       end
@@ -43,6 +43,11 @@ Rails.application.routes.draw do
       
       resources :reports, only: %I(create)
       resources :block_users, only: %I(create destroy)
+      resources :video_calls, only: %I(create) do
+        collection do
+          post :rooms
+        end
+      end
       
     end
   end

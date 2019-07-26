@@ -4,6 +4,10 @@ module Api
       include TwilioMethods
       skip_before_action :authentication!, only: [:status_with_email, :auth]
       
+      def show
+        @user = User.find(params[:id])
+      end
+
       def status_with_email
         @user = User.new(email: user_params[:email])
         @user.valid?
