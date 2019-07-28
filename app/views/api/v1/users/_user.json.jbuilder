@@ -9,7 +9,7 @@ end
   json.gender                   user.gender
   json.phone_number             user.phone_number
   json.code_country             user.code_country
-  json.birth_date               user.birth_date
+  json.birth_date               user.birth_date.strftime("%d-%m-%Y")
   json.country                  user.country
   json.city                     user.city
   json.images do

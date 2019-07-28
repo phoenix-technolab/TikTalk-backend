@@ -1,20 +1,18 @@
 class UserProfile::UserProfileUpdate
   extend LightService::Organizer
-  def self.call(current_user, 
-                user_params, 
-                profile_params, 
-                profile_notifications_params, 
-                attachment_params)
-    with(current_user: current_user,
-         user_params: user_params,
-         profile_params: profile_params,
-         profile_notifications_params: profile_notifications_params,
-         attachment_params: attachment_params).reduce(
-          UserProfile::UserProfileUpdate::UpdateUser,
-          UserProfile::UserProfileUpdate::UpdateUserPhotos,
-          UserProfile::UserProfileUpdate::UpdateUserProfile,
-          UserProfile::UserProfileUpdate::UpdateUserNotifications
-      )
+  def self.call(current_user, user_params, profile_params, profile_notifications_params, attachment_params)
+    with(
+      current_user: current_user,
+      user_params: user_params,
+      profile_params: profile_params,
+      profile_notifications_params: profile_notifications_params,
+      attachment_params: attachment_params
+    ).reduce(
+      UserProfile::UserProfileUpdate::UpdateUser,
+      UserProfile::UserProfileUpdate::UpdateUserPhotos,
+      UserProfile::UserProfileUpdate::UpdateUserProfile,
+      UserProfile::UserProfileUpdate::UpdateUserNotifications
+    )
   end
 end
 
@@ -28,7 +26,6 @@ class UserProfile::UserProfileUpdate::UpdateUser
       context.fail_and_return!(context.current_user)
     end
   end
-
 end
 
 class UserProfile::UserProfileUpdate::UpdateUserPhotos
