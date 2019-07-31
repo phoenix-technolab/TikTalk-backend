@@ -19,7 +19,7 @@ module Api
       end
 
       def auth
-        result = CreateUserWithPhotos.call(user_params, images_params)
+        result = Users::CreateUserWithPhotos.call(user_params, images_params)
         if result.success?
           @user = result.user
           response.headers["Auth-token"] = @user.tokens.first

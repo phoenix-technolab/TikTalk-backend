@@ -11,7 +11,7 @@ module Api
       end
 
       def reset_dislikes
-        current_user.like_dislikes.where(status:"dislike").destroy_all
+        current_user.like_dislikes.where(status: "dislike").destroy_all
       end 
 
       private

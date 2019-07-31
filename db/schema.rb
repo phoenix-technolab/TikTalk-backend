@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_11_120914) do
+ActiveRecord::Schema.define(version: 2019_07_31_092052) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -60,7 +60,7 @@ ActiveRecord::Schema.define(version: 2019_07_11_120914) do
     t.integer "children", default: 0
     t.integer "smoking", default: 0
     t.integer "drinking", default: 0
-    t.string "speak", default: [], array: true
+    t.string "languages", default: [], array: true
     t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

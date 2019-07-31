@@ -1,15 +1,15 @@
-class CreateUserWithPhotos
+class Users::CreateUserWithPhotos
   extend LightService::Organizer
   def self.call(user_params, images_params)
     with(user_params: user_params,
          images_params: images_params).reduce(
-      CreateUserWithPhotos::CreateUser,
-      CreateUserWithPhotos::AddImagesToUser
+      Users::CreateUserWithPhotos::CreateUser,
+      Users::CreateUserWithPhotos::AddImagesToUser
       )
   end
 end
 
-class CreateUserWithPhotos::CreateUser
+class Users::CreateUserWithPhotos::CreateUser
   extend LightService::Action
   expects :user_params
   promises :user
@@ -21,7 +21,7 @@ class CreateUserWithPhotos::CreateUser
   end
 end
 
-class CreateUserWithPhotos::AddImagesToUser
+class Users::CreateUserWithPhotos::AddImagesToUser
   extend LightService::Action
   expects :user, :images_params
   executed do |context|
