@@ -32,5 +32,4 @@ class Users::CreateUserWithPhotos::AddImagesToUser
       context.fail_and_return!({ errors: object.errors.full_messages, status: 422 }) unless object.save       
     end
   end
-  
 end
