@@ -39,7 +39,7 @@ end
   json.children                 user.profile.children
   json.smoking                  user.profile.smoking
   json.drinking                 user.profile.drinking
-  json.languages                    user.profile.languages
+  json.languages                user.profile.languages
   json.notifications            user.profile.notifications
   json.lat                      user.lat
   json.lng                      user.lng

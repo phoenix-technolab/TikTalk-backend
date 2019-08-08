@@ -34,14 +34,14 @@ class UserProfile::UserProfileUpdate::UpdateUserPhotos
   promises :current_user
 
   executed do |context|
-      context.attachment_params[:add_images]&.each do |image| 
-       object = context.current_user.attachments.new(image: image)
-       unless object.save
+    context.attachment_params[:add_images]&.each do |image| 
+      object = context.current_user.attachments.new(image: image)
+      unless object.save
         context.fail_and_return!(object.errors.full_messages) 
-       end
       end
-    
-      context.current_user.attachments.where(id: context.attachment_params[:delete_images]).destroy_all 
+    end
+  
+    context.current_user.attachments.where(id: context.attachment_params[:delete_images]).destroy_all 
   end
 end
 
