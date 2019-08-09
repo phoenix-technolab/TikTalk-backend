@@ -10,6 +10,7 @@ Rails.application.routes.draw do
           post :twilio_user
           post :twilio_token
           delete :delete_account
+          post :friends
         end
       end
       

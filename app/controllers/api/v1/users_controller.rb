@@ -18,6 +18,13 @@ module Api
         end
       end
 
+      def friends
+        @users = User.where(
+          "CONCAT(code_country,phone_number) IN (:numbers)", 
+          numbers: friends_params[:friends].map{|f| f.values.reduce(:+)}
+        )
+      end
+
       def auth
         result = Users::CreateUserWithPhotos.call(user_params, images_params)
         if result.success?
@@ -65,6 +72,15 @@ module Api
         params.permit(:email, :gender, :phone_number, :name,
                       :code_country, :country, :city, :birth_date,
                       :lat, :lng)
+      end
+
+      def friends_params
+        params.permit(
+          friends: [
+            :country_code,
+            :phone_number
+          ]
+        )
       end
 
       def images_params

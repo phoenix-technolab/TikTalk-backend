@@ -17,7 +17,7 @@ class Registration::FindExistUserByPhoneNumber::VerifyPhoneNumber
     context.phone_number = MyRedis.client.get(context.code)
     next if context.phone_number.present?
     
-    context.fail_and_return!({ message: "Incorect code", status: 400 })
+    context.fail_and_return!({ message: "Incorrect code", status: 400 })
   end
 end
 
