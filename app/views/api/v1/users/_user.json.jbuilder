@@ -41,6 +41,7 @@ end
   json.drinking                 user.profile.drinking
   json.languages                user.profile.languages
   json.notifications            user.profile.notifications
+  json.zodiac                   user.profile.zodiac
   json.lat                      user.lat
   json.lng                      user.lng
   json.created_at               user.created_at

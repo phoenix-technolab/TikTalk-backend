@@ -43,7 +43,7 @@ module Api
 
       def profile_params
         params.permit(:work, :education, :about_you, :relationship,
-                      :sexuality, :height, :living, :children,
+                      :sexuality, :height, :living, :children, :zodiac,
                       :smoking, :drinking, languages:[])
       end
 

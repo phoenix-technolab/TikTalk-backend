@@ -37,4 +37,5 @@ class Profile < ApplicationRecord
   enum children: %I(no_answer grown_up already_have no_never someday), _prefix: true
   enum smoking: %I(no_answer heavy_smoker hate_smoking dont_like_it social_smoker smoke_occasionally), _prefix: true
   enum drinking: %I(no_answer drink_socially dont_drink against_drinking drink_a_lot), _prefix: true
+  enum zodiac: %I(aries taurus gemini cancer leo virgo libra scorpio sagittarius capricorn aquarius pisces)
 end

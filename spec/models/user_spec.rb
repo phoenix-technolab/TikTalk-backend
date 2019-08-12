@@ -20,6 +20,7 @@
 #  lat              :float
 #  lng              :float
 #  can_reset        :boolean          default(FALSE)
+#  zodiac           :integer
 #
 
 require 'rails_helper'

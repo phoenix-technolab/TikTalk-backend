@@ -20,6 +20,7 @@
 #  lat              :float
 #  lng              :float
 #  can_reset        :boolean          default(FALSE)
+#  zodiac           :integer
 #
 
 class User < ApplicationRecord
@@ -36,7 +37,7 @@ class User < ApplicationRecord
 
   after_create :create_profile
 
-  enum gender: [:male, :female]
+  enum gender: %I(male female)
 
   validates :gender, :email, :name, :birth_date, :country, :city, :phone_number, :code_country, presence: true
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }, uniqueness: { case_sensitive: false }
