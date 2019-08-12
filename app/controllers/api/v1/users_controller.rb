@@ -61,7 +61,7 @@ module Api
           ENV.fetch("TWILIO_API_KEY"),
           ENV.fetch("TWILIO_API_SECRET"),
           [grant],
-          identity: current_user.email
+          identity: current_user.email,
           ttl: 5.minutes.to_i
         )
         render json: { token: token.to_jwt }
