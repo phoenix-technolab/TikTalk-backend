@@ -42,6 +42,8 @@ end
   json.languages                user.profile.languages
   json.notifications            user.profile.notifications
   json.zodiac                   user.profile.zodiac
+  json.locker_value             user.profile.locker_value
+  json.locker_type              user.profile.locker_type
   json.lat                      user.lat
   json.lng                      user.lng
   json.created_at               user.created_at

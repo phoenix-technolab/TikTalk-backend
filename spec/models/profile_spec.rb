@@ -27,6 +27,7 @@
 #  instagram_photos_url     :string           default([]), is an Array
 #  twilio_user_id           :string           default("")
 #  notifications            :json
+#  zodiac                   :integer          default("no_answer"), not null
 #
 
 require 'rails_helper'

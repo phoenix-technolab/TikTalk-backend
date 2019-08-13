@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_12_123714) do
+ActiveRecord::Schema.define(version: 2019_08_13_100852) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -68,6 +68,8 @@ ActiveRecord::Schema.define(version: 2019_08_12_123714) do
     t.string "twilio_user_id", default: ""
     t.json "notifications", default: {"pause_all"=>false, "messages"=>true, "new_matches"=>true, "like_you"=>true, "message_in_private_room"=>true, "super_like"=>true}
     t.integer "zodiac", default: 0, null: false
+    t.string "locker_value"
+    t.integer "locker_type"
     t.index ["user_id"], name: "index_profiles_on_user_id"
   end
 

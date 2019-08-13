@@ -44,7 +44,8 @@ module Api
       def profile_params
         params.permit(:work, :education, :about_you, :relationship,
                       :sexuality, :height, :living, :children, :zodiac,
-                      :smoking, :drinking, languages:[])
+                      :smoking, :drinking, :locker_type, :locker_value,
+                      languages:[])
       end
 
       def update_attachment_params
