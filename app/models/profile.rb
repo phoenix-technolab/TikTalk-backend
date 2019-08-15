@@ -39,4 +39,5 @@ class Profile < ApplicationRecord
   enum smoking: %I(no_answer heavy_smoker hate_smoking dont_like_it social_smoker smoke_occasionally), _prefix: true
   enum drinking: %I(no_answer drink_socially dont_drink against_drinking drink_a_lot), _prefix: true
   enum zodiac: %I(no_answer aries taurus gemini cancer leo virgo libra scorpio sagittarius capricorn aquarius pisces), _prefix: true
+  enum locker_type: %I(pattern pin fingerprint)
 end

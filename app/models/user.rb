@@ -39,7 +39,6 @@ class User < ApplicationRecord
   after_create :create_profile
 
   enum gender: %I(male female)
-  enum locker_type: %I(pattern pin fingerprint)
 
   validates :gender, :email, :name, :birth_date, :country, :city, :phone_number, :code_country, presence: true
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }, uniqueness: { case_sensitive: false }
