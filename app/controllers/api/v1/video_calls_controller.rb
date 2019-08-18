@@ -18,7 +18,7 @@ class Api::V1::VideoCallsController < ApplicationController
     return unless callback_params[:StatusCallbackEvent].eql?("room-created")
 
     result = RoomCallbacks::Created.call(
-      callee_id: callback_params[:RoomName]
+      room_name: callback_params[:RoomName]
     )
     render json_service_messages(result) unless result.success?
   end
