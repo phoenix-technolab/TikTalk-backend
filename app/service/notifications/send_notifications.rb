@@ -1,16 +1,16 @@
 module Notifications
   class SendNotifications
     extend LightService::Organizer
-    def self.call(firebase_tokens, params)
-      with(firebase_tokens: firebase_tokens,
-           params: params).reduce(
-            Notifications::SendNotifications::InitializeClient,
-            Notifications::SendNotifications::SendNotificationsToUser
-        )
+    def self.call(firebase_tokens, param, data: {})
+      with(
+        firebase_tokens: firebase_tokens,
+        params: params,
+        data: data
+      ).reduce(
+        Notifications::SendNotifications::InitializeClient,
+        Notifications::SendNotifications::SendNotificationsToUser
+      )
     end 
-
-   
-
   end
 
   class Notifications::SendNotifications::InitializeClient
@@ -24,7 +24,7 @@ module Notifications
 
   class Notifications::SendNotifications::SendNotificationsToUser
     extend LightService::Action
-    expects :fcm_client, :firebase_tokens, :params
+    expects :fcm_client, :firebase_tokens, :params, :data
     promises :response
     executed do |context|
       context.response =  context.fcm_client.send(context.firebase_tokens, 
@@ -34,7 +34,7 @@ module Notifications
               title: 'TikTalk',
               body: context.params
           },
-          data: {}
+          data: context.data
         })
     end
   end
