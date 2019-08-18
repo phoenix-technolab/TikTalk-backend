@@ -1,4 +1,5 @@
 class Api::V1::VideoCallsController < ApplicationController
+  skip_before_action :authentication!, only: :room_status_callback
   include TwilioMethods
 
   def create
