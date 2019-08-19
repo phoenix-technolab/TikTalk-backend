@@ -1,7 +1,7 @@
 module Notifications
   class SendNotifications
     extend LightService::Organizer
-    def self.call(firebase_tokens, param, data: {})
+    def self.call(firebase_tokens:, params:, data: {})
       with(
         firebase_tokens: firebase_tokens,
         params: params,
@@ -27,16 +27,20 @@ module Notifications
     expects :fcm_client, :firebase_tokens, :params, :data
     promises :response
     executed do |context|
-      context.response =  context.fcm_client.send(context.firebase_tokens, 
-        {
-          priority: 'high',
-          notification: {
-              title: 'TikTalk',
-              body: context.params
-          },
-          data: context.data
-        })
+      options = {
+        notification: {
+          data: context.data,
+          title: 'TikTalk',
+          body: context.params
+        }
+      }
+      context.response =  context.fcm_client.send([context.firebase_tokens], options)
+
+      pp "=" * 100
+      pp context.response
+      pp "=" * 100
+      pp options
+      pp "=" * 100
     end
   end
-
 end

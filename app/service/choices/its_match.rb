@@ -41,7 +41,11 @@ class Choices::ItsMatch::LikeNotification
       
     receiver_firebase_token = context.choice.receiver.firebase_token
     opts = { message: "Someone send like to you!" } 
-    Notifications::SendNotifications.call(receiver_firebase_token, opts)
+    
+    Notifications::SendNotifications.call(
+      firebase_tokens: receiver_firebase_token, 
+      params: opts
+    )
   end
 end
 
@@ -71,7 +75,11 @@ class Choices::ItsMatch::ItsMatchNotification
 
     receiver_firebase_token = context.choice.receiver.firebase_token
     opts = { message: "You with #{context.choice.user.name} matched!" }
-    Notifications::SendNotifications.call(receiver_firebase_token, opts)
+
+    Notifications::SendNotifications.call(
+      firebase_tokens: receiver_firebase_token, 
+      params: opts
+    )
   end
 end
 
@@ -89,7 +97,11 @@ class Choices::ItsMatch::SuperLikeNotification
 
     receiver_firebase_token = context.choice.receiver.firebase_token
     opts = { message: "#{context.choice.user.name} send super-like to you" }
-    Notifications::SendNotifications.call(receiver_firebase_token, opts) 
+
+    Notifications::SendNotifications.call(
+      firebase_tokens: receiver_firebase_token, 
+      params: opts
+    )
   end
 end
 
