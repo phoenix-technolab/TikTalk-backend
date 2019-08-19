@@ -19,13 +19,13 @@ class RoomCallbacks::CallCreated
       context.callee = User.find_by(email: context.callee_email)
       context.caller = User.find_by(email: context.caller_email)
 
-      next if context.callee.present? 
-
       pp "=" * 100
       pp context.callee&.email
       pp "=" * 100
       pp context.caller&.email
       pp "=" * 100
+      
+      next if context.callee.present? 
 
       context.fail_and_return!("Callee doesn't exist")
     end
