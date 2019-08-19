@@ -2,8 +2,8 @@ class RoomCallbacks::CallCreated
   extend LightService::Organizer
   def self.call(room_name:)
     with(
-      callee_email: room_name.split('|').first,
-      caller_email: room_name.split('|').last
+      callee_email: room_name.split("\\").first,
+      caller_email: room_name.split("\\").last
     ).reduce(
       RoomCallbacks::CallCreated::FindCallParticipants,
       RoomCallbacks::CallCreated::SendPush
