@@ -1,30 +1,30 @@
-class RoomCallbacks::Created
+class RoomCallbacks::CallCreated
   extend LightService::Organizer
   def self.call(room_name:)
     with(
-      callee_sid: room_name.split('_').first,
-      caller_sid: room_name.split('_').last
+      callee_email: room_name.split('|').first,
+      caller_email: room_name.split('|').last
     ).reduce(
-      RoomCallbacks::Created::FindCallParticipants,
-      RoomCallbacks::Created::SendPush
+      RoomCallbacks::CallCreated::FindCallParticipants,
+      RoomCallbacks::CallCreated::SendPush
     )
   end
 
-  class RoomCallbacks::Created::FindCallParticipants
+  class RoomCallbacks::CallCreated::FindCallParticipants
     extend LightService::Action
-    expects :callee_sid, :caller_sid
+    expects :callee_email, :caller_email
     promises :callee, :caller
 
     executed do |context|
-      context.callee = User.joins(:profile).where('profiles.twilio_user_id': context.callee_sid).take
-      context.caller = User.joins(:profile).where('profiles.twilio_user_id': context.caller_sid).take
+      context.callee = User.find_by(email: context.callee_email)
+      context.caller = User.find_by(email: context.caller_email)
 
       next if context.callee.present?
 
       context.fail_and_return!("Callee doesn't exist")
     end
   end
-  class RoomCallbacks::Created::SendPush
+  class RoomCallbacks::CallCreated::SendPush
     extend LightService::Action
 
     expects :callee, :caller

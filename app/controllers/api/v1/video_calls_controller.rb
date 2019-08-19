@@ -17,11 +17,18 @@ class Api::V1::VideoCallsController < ApplicationController
   def room_status_callback
     return unless callback_params[:StatusCallbackEvent].eql?("room-created")
 
-    result = RoomCallbacks::Created.call(
+    result = RoomCallbacks::CallCreated.call(
       room_name: callback_params[:RoomName]
     )
     render json_service_messages(result) unless result.success?
   end
+
+  # def decline_call
+  #   result = RoomCallbacks::CallDeclined.call(
+  #     room_name: callback_params[:RoomName]
+  #   )
+  #   render json_service_messages(result) unless result.success?
+  # end
 
   private
 
@@ -30,4 +37,8 @@ class Api::V1::VideoCallsController < ApplicationController
       :StatusCallbackEvent, :RoomName
     )
   end
+
+  # def push_params
+  #   params.permit(:caller_sid)
+  # end
 end
