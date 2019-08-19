@@ -25,6 +25,14 @@ module Api
         )
       end
 
+      def firebase_token
+        current_user.update!(
+          firebase_token: user_params[:firebase_token]
+        )
+        
+        render json: { firebase_token: current_user.firebase_token }
+      end
+
       def auth
         result = Users::CreateUserWithPhotos.call(user_params, images_params)
         if result.success?
@@ -72,7 +80,7 @@ module Api
       def user_params
         params.permit(:email, :gender, :phone_number, :name,
                       :code_country, :country, :city, :birth_date,
-                      :lat, :lng)
+                      :lat, :lng, :firebase_token)
       end
 
       def friends_params

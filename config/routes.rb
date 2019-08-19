@@ -11,6 +11,7 @@ Rails.application.routes.draw do
           post :twilio_token
           delete :delete_account
           post :friends
+          patch :firebase_token
         end
       end
       
