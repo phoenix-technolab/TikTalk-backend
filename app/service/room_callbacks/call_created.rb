@@ -24,7 +24,7 @@ class RoomCallbacks::CallCreated
       pp "=" * 100
       pp context.caller&.email
       pp "=" * 100
-      
+
       next if context.callee.present? 
 
       context.fail_and_return!("Callee doesn't exist")
@@ -41,9 +41,8 @@ class RoomCallbacks::CallCreated
       opts = "#{context.caller&.name} calling you"
       data = push_data(context.caller)
 
-      Notifications::SendNotifications.call(
-        firebase_tokens: firebase_token, 
-        params: opts, 
+      Notifications::SendSilentPush.call(
+        firebase_tokens: firebase_token,
         data: data
       )
     end
