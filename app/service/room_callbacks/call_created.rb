@@ -49,11 +49,12 @@ class RoomCallbacks::CallCreated
 
     def self.push_data(caller)
       {
-        type: "onCallInvite",
-        caller_id: caller.id,
-        caller_name: caller.name,
-        caller_email: caller.email,
-        caller_phone: caller.phone_number
+        type:          "onCallInvite",
+        caller_id:     caller.id,
+        caller_name:   caller.name,
+        caller_email:  caller.email,
+        caller_phone:  caller.phone_number,
+        caller_avatar: caller.attachments.first.image.url
       }
     end
   end
