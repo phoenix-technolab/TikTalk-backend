@@ -3,28 +3,12 @@ class RoomCallbacks::CallDeclined
   def self.call(group_name:, declined_by_email:)
     with(
       declined_by_email: declined_by_email,
-      group_name:        group_name
+      callee_email:      group_name.split("\\").first,
+      caller_email:      group_name.split("\\").last
     ).reduce(
-      RoomCallbacks::CallDeclined::SetCalleeAndCallerEmail,
       RoomCallbacks::CallDeclined::FindCallParticipants,
       RoomCallbacks::CallDeclined::SendPush
     )
-  end
-
-  class RoomCallbacks::CallDeclined::SetCalleeAndCallerEmail
-    extend LightService::Action
-    expects :group_name
-    promises :callee_email, :caller_email
-
-    executed do |context|
-
-      pp "=" * 100
-      pp context.group_name
-      pp "=" * 100
-
-      context.callee_email = context.group_name.split("\\").first
-      context.caller_email = context.group_name.split("\\").last
-    end
   end
 
   class RoomCallbacks::CallDeclined::FindCallParticipants
