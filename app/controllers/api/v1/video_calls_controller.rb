@@ -24,6 +24,10 @@ class Api::V1::VideoCallsController < ApplicationController
   end
 
   def decline_call
+    pp "=" * 100
+    pp callback_params[:group_name]
+    pp "=" * 100
+
     result = RoomCallbacks::CallDeclined.call(
       group_name:        callback_params[:group_name],
       declined_by_email: callback_params[:declined_by_email]
