@@ -17,6 +17,11 @@ class RoomCallbacks::CallDeclined
     promises :callee_email, :caller_email
 
     executed do |context|
+
+      pp "=" * 100
+      pp context.group_name
+      pp "=" * 100
+
       context.callee_email = context.group_name.split("\\").first
       context.caller_email = context.group_name.split("\\").last
     end
