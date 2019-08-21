@@ -1,10 +1,10 @@
 class RoomCallbacks::CallDeclined
   extend LightService::Organizer
-  def self.call(room_name:, declined_by_email:)
+  def self.call(group_name:, declined_by_email:)
     with(
       declined_by_email: declined_by_email,
-      callee_email:      room_name.split("\\").first,
-      caller_email:      room_name.split("\\").last
+      callee_email:      group_name.split("\\").first,
+      caller_email:      group_name.split("\\").last
     ).reduce(
       RoomCallbacks::CallDeclined::FindCallParticipants,
       RoomCallbacks::CallDeclined::SendPush
