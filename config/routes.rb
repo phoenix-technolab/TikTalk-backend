@@ -48,6 +48,7 @@ Rails.application.routes.draw do
       resources :video_calls, only: %I(create) do
         collection do
           post :room_status_callback
+          post :decline_call
         end
       end
     end
