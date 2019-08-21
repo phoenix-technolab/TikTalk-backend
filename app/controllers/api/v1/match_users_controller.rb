@@ -2,13 +2,15 @@ module Api
   module V1
     class MatchUsersController < ApplicationController
       def index
-        @users = User.by_gender(current_user)
+        # @users = User.by_gender(current_user)
+        #              .where.not(id: current_user.id)
+        #              .by_age(current_user)
+        #              .by_distance_to_user(current_user)
+        #              .by_show_in_app
+        #              .no_display_reported_users(current_user)
+        #              .no_display_liked_or_disliked(current_user)
+          @users = User.by_gender(current_user)
                      .where.not(id: current_user.id)
-                     .by_age(current_user)
-                     .by_distance_to_user(current_user)
-                     .by_show_in_app
-                     .no_display_reported_users(current_user)
-                     .no_display_liked_or_disliked(current_user)
 
        render json: { message: "No one new arround you" } if @users.blank?       
       end
