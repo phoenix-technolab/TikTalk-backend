@@ -9,8 +9,7 @@ module Api
         #              .by_show_in_app
         #              .no_display_reported_users(current_user)
         #              .no_display_liked_or_disliked(current_user)
-          @users = User.by_gender(current_user)
-                     .where.not(id: current_user.id)
+          @users = User.where.not(id: current_user.id)
 
        render json: { message: "No one new arround you" } if @users.blank?       
       end
