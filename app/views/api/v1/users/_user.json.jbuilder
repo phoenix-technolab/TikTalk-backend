@@ -13,9 +13,16 @@ end
   json.country                  user.country
   json.city                     user.city
   json.images do
-    json.array! user.attachments do |image|
-      json.id                  image.id
-      json.url                 image.image.url
+    if user.attachments.blank?
+      json.array! [{id: SecureRandom.uuid, url: ENV['NO_PHOTO_PLACEHOLDER']}] do |item|
+        json.id   item[:id]
+        json.url  item[:url]
+      end
+    else
+      json.array! user.attachments do |image|
+        json.id                  image.id
+        json.url                 image.image.url
+      end
     end
   end
   json.twilio_user_id           user.profile.twilio_user_id
