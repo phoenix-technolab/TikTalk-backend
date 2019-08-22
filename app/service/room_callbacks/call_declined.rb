@@ -41,18 +41,19 @@ class RoomCallbacks::CallDeclined
       receiver       = context.declined_by_email.eql?(context.caller.email) ? context.callee : context.caller
       firebase_token = receiver.firebase_token
       opts           = "#{context.caller&.name} calling you"
-      data           = push_data(context.declined_by_email)
+      data           = push_data(context.declined_by_email, context.caller.id)
 
       Notifications::SendSilentPush.call(
         firebase_tokens: firebase_token,
-        data: data
+        data:            data
       )
     end
 
-    def self.push_data(email)
+    def self.push_data(email, caller_id)
       {
         type:              "onCancelledCallInvite",
-        declined_by_email: email
+        declined_by_email: email,
+        caller_id:         caller_id
       }
     end
   end
