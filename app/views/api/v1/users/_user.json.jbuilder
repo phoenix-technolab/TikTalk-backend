@@ -14,7 +14,7 @@ end
   json.city                     user.city
   json.images do
     if user.attachments.blank?
-      json.array! [{id: SecureRandom.uuid, url: ENV['NO_PHOTO_PLACEHOLDER']}] do |item|
+      json.array! [{id: rand(1000000..9999999), url: ENV['NO_PHOTO_PLACEHOLDER']}] do |item|
         json.id   item[:id]
         json.url  item[:url]
       end
