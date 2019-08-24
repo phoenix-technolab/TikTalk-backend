@@ -53,6 +53,7 @@ class RoomCallbacks::CallDeclined
       {
         type:              "onCancelledCallInvite",
         declined_by_email: email,
+        only_audio:        true,
         caller_id:         caller_id
       }
     end

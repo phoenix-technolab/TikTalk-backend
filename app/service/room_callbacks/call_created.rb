@@ -49,6 +49,7 @@ class RoomCallbacks::CallCreated
 
     def self.push_data(caller)
       {
+        only_audio:    true,
         type:          "onCallInvite",
         caller_id:     caller.id,
         caller_name:   caller.name,
