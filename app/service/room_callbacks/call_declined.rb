@@ -1,9 +1,10 @@
 class RoomCallbacks::CallDeclined
   extend LightService::Organizer
-  def self.call(group_name:, declined_by_email:)
+  def self.call(group_name:, declined_by_email:, room_sid:)
     with(
       declined_by_email: declined_by_email,
-      group_name:        group_name
+      group_name:        group_name,
+      room_sid:          room_sid
     ).reduce(
       RoomCallbacks::CallDeclined::SetFindCallParticipants,
       RoomCallbacks::CallDeclined::FindCallParticipants,
@@ -43,11 +44,10 @@ class RoomCallbacks::CallDeclined
       context.fail_and_return!("Callee doesn't exist")
     end
   end
-  
   class RoomCallbacks::CallDeclined::SendPush
     extend LightService::Action
 
-    expects :callee, :caller, :declined_by_email
+    expects :callee, :caller, :declined_by_email, :room_sid
 
     executed do |context|
       receiver       = context.declined_by_email.eql?(context.caller.email) ? context.callee : context.caller
@@ -68,6 +68,7 @@ class RoomCallbacks::CallDeclined
     def self.push_data(context)
       {
         type:              "onCancelledCallInvite",
+        room_sid:          context.room_sid,
         declined_by_email: context.declined_by_email,
         only_audio:        is_audio?(context),
         caller_id:         context.caller.id

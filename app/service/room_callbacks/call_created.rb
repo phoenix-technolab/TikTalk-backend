@@ -1,7 +1,10 @@
 class RoomCallbacks::CallCreated
   extend LightService::Organizer
-  def self.call(room_name:)
-    with(room_name: room_name).reduce(
+  def self.call(room_name:, room_sid:)
+    with(
+      room_name: room_name,
+      room_sid: room_sid
+    ).reduce(
       RoomCallbacks::CallCreated::SetFindCallParticipants,
       RoomCallbacks::CallCreated::FindCallParticipants,
       RoomCallbacks::CallCreated::SendPush
@@ -43,7 +46,7 @@ class RoomCallbacks::CallCreated
   class RoomCallbacks::CallCreated::SendPush
     extend LightService::Action
 
-    expects :callee, :caller
+    expects :callee, :caller, :room_sid
 
     executed do |context|
       firebase_token = context.callee.firebase_token
@@ -65,6 +68,7 @@ class RoomCallbacks::CallCreated
       {
         only_audio:    is_audio?(context),
         type:          "onCallInvite",
+        room_sid:      context.room_sid,
         caller_id:     context.caller.id,
         caller_name:   context.caller.name,
         caller_email:  context.caller.email,
