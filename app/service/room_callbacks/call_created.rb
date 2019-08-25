@@ -1,15 +1,25 @@
 class RoomCallbacks::CallCreated
   extend LightService::Organizer
   def self.call(room_name:)
-    with(
-      callee_email: room_name.split("\\").first,
-      caller_email: room_name.split("\\").last
-    ).reduce(
+    with(room_name: room_name).reduce(
+      RoomCallbacks::CallCreated::SetFindCallParticipants,
       RoomCallbacks::CallCreated::FindCallParticipants,
       RoomCallbacks::CallCreated::SendPush
     )
   end
+  class RoomCallbacks::CallCreated::SetFindCallParticipants
+    extend LightService::Action
+    
+    expects :room_name
+    promises :callee_email, :caller_email, :divider_count
 
+    executed do |context|
+      context.divider_count = context.room_name.count("\\")
+      divider               = "\\" * context.divider_count
+      context.callee_email  = context.room_name.split(divider).first
+      context.caller_email  = context.room_name.split(divider).last
+    end
+  end
   class RoomCallbacks::CallCreated::FindCallParticipants
     extend LightService::Action
     expects :callee_email, :caller_email
@@ -39,7 +49,7 @@ class RoomCallbacks::CallCreated
       firebase_token = context.callee.firebase_token
 
       opts = "#{context.caller&.name} calling you"
-      data = push_data(context.caller)
+      data = push_data(context)
 
       Notifications::SendSilentPush.call(
         firebase_tokens: firebase_token,
@@ -47,15 +57,19 @@ class RoomCallbacks::CallCreated
       )
     end
 
-    def self.push_data(caller)
+    def self.is_audio?(context)
+      context.divider_count.eql?(2) ? true : false
+    end
+
+    def self.push_data(context)
       {
-        only_audio:    true,
+        only_audio:    is_audio?(context),
         type:          "onCallInvite",
-        caller_id:     caller.id,
-        caller_name:   caller.name,
-        caller_email:  caller.email,
-        caller_phone:  caller.phone_number,
-        caller_avatar: caller.attachments.first.image.url
+        caller_id:     context.caller.id,
+        caller_name:   context.caller.name,
+        caller_email:  context.caller.email,
+        caller_phone:  context.caller.phone_number,
+        caller_avatar: context.caller.attachments.first.image.url
       }
     end
   end

@@ -20,7 +20,7 @@ class Api::V1::VideoCallsController < ApplicationController
     result = RoomCallbacks::CallCreated.call(
       room_name: callback_params[:RoomName]
     )
-    render json_service_messages(result) unless result.success?
+    return render_error(result.message) unless result.success?
   end
 
   def decline_call
@@ -28,7 +28,7 @@ class Api::V1::VideoCallsController < ApplicationController
       group_name:        push_params[:group_name],
       declined_by_email: push_params[:declined_by_email]
     )
-    render json_service_messages(result) unless result.success?
+    return render_error(result.message) unless result.success?
   end
 
   private

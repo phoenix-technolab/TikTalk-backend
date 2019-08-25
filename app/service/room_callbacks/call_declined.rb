@@ -3,14 +3,26 @@ class RoomCallbacks::CallDeclined
   def self.call(group_name:, declined_by_email:)
     with(
       declined_by_email: declined_by_email,
-      callee_email:      group_name.split("\\").first,
-      caller_email:      group_name.split("\\").last
+      group_name:        group_name
     ).reduce(
+      RoomCallbacks::CallDeclined::SetFindCallParticipants,
       RoomCallbacks::CallDeclined::FindCallParticipants,
       RoomCallbacks::CallDeclined::SendPush
     )
   end
+  class RoomCallbacks::CallDeclined::SetFindCallParticipants
+    extend LightService::Action
 
+    expects :group_name
+    promises :callee_email, :caller_email, :divider_count
+
+    executed do |context|
+      context.divider_count = context.group_name.count("\\")
+      divider               = "\\" * context.divider_count
+      context.callee_email  = context.group_name.split(divider).first
+      context.caller_email  = context.group_name.split(divider).last
+    end
+  end
   class RoomCallbacks::CallDeclined::FindCallParticipants
     extend LightService::Action
     expects :callee_email, :caller_email, :declined_by_email
@@ -41,20 +53,24 @@ class RoomCallbacks::CallDeclined
       receiver       = context.declined_by_email.eql?(context.caller.email) ? context.callee : context.caller
       firebase_token = receiver.firebase_token
       opts           = "#{context.caller&.name} calling you"
-      data           = push_data(context.declined_by_email, context.caller.id)
+      data           = push_data(context)
 
       Notifications::SendSilentPush.call(
         firebase_tokens: firebase_token,
         data:            data
       )
     end
+    
+    def self.is_audio?(context)
+      context.divider_count.eql?(2) ? true : false
+    end
 
-    def self.push_data(email, caller_id)
+    def self.push_data(context)
       {
         type:              "onCancelledCallInvite",
-        declined_by_email: email,
-        only_audio:        true,
-        caller_id:         caller_id
+        declined_by_email: context.declined_by_email,
+        only_audio:        is_audio?(context),
+        caller_id:         context.caller.id
       }
     end
   end
