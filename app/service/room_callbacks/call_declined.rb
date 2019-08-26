@@ -21,7 +21,7 @@ class RoomCallbacks::CallDeclined
       context.divider_count = context.group_name.count("\\")
       divider               = "\\" * context.divider_count
       context.callee_email  = context.group_name.split(divider).first
-      context.callee_email  = context.group_name.split(divider).second
+      context.caller_email  = context.group_name.split(divider).second
       context.channel_sid   = context.group_name.split(divider).third
     end
   end
