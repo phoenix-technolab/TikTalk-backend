@@ -14,13 +14,14 @@ class RoomCallbacks::CallCreated
     extend LightService::Action
     
     expects :room_name
-    promises :callee_email, :caller_email, :divider_count
+    promises :callee_email, :caller_email, :divider_count, :channel_sid
 
     executed do |context|
       context.divider_count = context.room_name.count("\\")
       divider               = "\\" * context.divider_count
       context.callee_email  = context.room_name.split(divider).first
-      context.caller_email  = context.room_name.split(divider).last
+      context.callee_email  = context.room_name.split(divider).second
+      context.channel_sid   = context.room_name.split(divider).third
     end
   end
   class RoomCallbacks::CallCreated::FindCallParticipants
@@ -71,6 +72,7 @@ class RoomCallbacks::CallCreated
         room_sid:      context.room_sid,
         caller_id:     context.caller.id,
         caller_name:   context.caller.name,
+        channel_sid:   context.channel_sid,
         caller_email:  context.caller.email,
         caller_phone:  context.caller.phone_number,
         caller_avatar: context.caller.attachments.first.image.url

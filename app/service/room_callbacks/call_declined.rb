@@ -15,13 +15,14 @@ class RoomCallbacks::CallDeclined
     extend LightService::Action
 
     expects :group_name
-    promises :callee_email, :caller_email, :divider_count
+    promises :callee_email, :caller_email, :divider_count, :channel_sid
 
     executed do |context|
       context.divider_count = context.group_name.count("\\")
       divider               = "\\" * context.divider_count
       context.callee_email  = context.group_name.split(divider).first
-      context.caller_email  = context.group_name.split(divider).last
+      context.callee_email  = context.group_name.split(divider).second
+      context.channel_sid   = context.group_name.split(divider).third
     end
   end
   class RoomCallbacks::CallDeclined::FindCallParticipants
@@ -69,6 +70,7 @@ class RoomCallbacks::CallDeclined
       {
         type:              "onCancelledCallInvite",
         room_sid:          context.room_sid,
+        channel_sid:       context.channel_sid,
         declined_by_email: context.declined_by_email,
         only_audio:        is_audio?(context),
         caller_id:         context.caller.id
