@@ -23,6 +23,16 @@ class RoomCallbacks::CallDeclined
       context.callee_email  = context.group_name.split(divider).first
       context.caller_email  = context.group_name.split(divider).second
       context.channel_sid   = context.group_name.split(divider).third
+
+
+      pp "=" * 100
+      pp context.callee_email
+      pp "=" * 100
+      pp context.caller_email
+      pp "=" * 100
+      pp context.channel_sid
+      pp "=" * 100
+      
     end
   end
   class RoomCallbacks::CallDeclined::FindCallParticipants
