@@ -19,7 +19,7 @@ class RoomCallbacks::CallDeclined
 
     executed do |context|
       context.divider_count = context.group_name.count("\\")
-      divider               = "\\" * context.divider_count
+      divider               = "\\" * (context.divider_count / 2)
       context.callee_email  = context.group_name.split(divider).first
       context.caller_email  = context.group_name.split(divider).second
       context.channel_sid   = context.group_name.split(divider).third
@@ -32,7 +32,11 @@ class RoomCallbacks::CallDeclined
       pp "=" * 100
       pp context.channel_sid
       pp "=" * 100
-      
+      pp context.divider_count
+      pp "=" * 100
+      pp divider
+      pp "=" * 100
+
     end
   end
   class RoomCallbacks::CallDeclined::FindCallParticipants

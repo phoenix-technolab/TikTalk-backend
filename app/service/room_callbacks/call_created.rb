@@ -18,7 +18,7 @@ class RoomCallbacks::CallCreated
 
     executed do |context|
       context.divider_count = context.room_name.count("\\")
-      divider               = "\\" * context.divider_count
+      divider               = "\\" * (context.divider_count / 2)
       context.callee_email  = context.room_name.split(divider).first
       context.caller_email  = context.room_name.split(divider).second
       context.channel_sid   = context.room_name.split(divider).third
