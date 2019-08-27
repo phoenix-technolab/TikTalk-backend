@@ -52,8 +52,10 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :streams, only: %I(index create) do 
+      resources :streams, only: %I(create) do 
         collection do 
+          get :nearby
+          get :popular
           post :callback
         end
       end

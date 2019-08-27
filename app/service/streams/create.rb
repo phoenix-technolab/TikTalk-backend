@@ -1,16 +1,18 @@
 class Streams::Create
   extend LightService::Organizer
-  def self.call(twilio_client:, current_user:)
+  def self.call(twilio_client:, current_user:, lat:, lon:)
     with(
       twilio_client: twilio_client,
-      current_user: current_user
+      current_user: current_user,
+      lat:          lat,
+      lon:          lon
     ).reduce(
-      Streams::Create::CreateTwillioRoom,
+      Streams::Create::CreateTwilioRoom,
       Streams::Create::CreateStream,
     )
   end
 
-  class Streams::Create::CreateTwillioRoom
+  class Streams::Create::CreateTwilioRoom
     extend LightService::Action
     
     expects :twilio_client, :current_user
@@ -19,7 +21,7 @@ class Streams::Create
     executed do |context|
       context.twilio_client.video.rooms.create(
         record_participants_on_connect: true,
-        status_callback: "#{ENV["HOST"]}/api/v1/streams/callback",
+        status_callback: "#{ENV["HOST"]}/v1/streams/callback",
         type: 'group',
         unique_name: room_name(context.current_user)
       )
@@ -35,11 +37,14 @@ class Streams::Create
   class Streams::Create::CreateStream
     extend LightService::Action
     
-    expects :current_user
+    expects :current_user, :lat, :lon
     promises :stream
 
     executed do |context|
-      context.stream = context.current_user.create_stream
+      context.stream = context.current_user.create_stream(
+        lat: context.lat, 
+        lon: context.lon
+      )
     end
   end
 end
