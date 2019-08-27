@@ -1,7 +1,6 @@
 module Api
   module V1
     class UsersController < ApplicationController
-      include TwilioMethods
       skip_before_action :authentication!, only: [:status_with_email, :auth]
       
       def show

@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::API
   include RenderMethods
+  include TwilioMethods
   before_action :authentication!, :set_default_format
 
   def authentication!
@@ -15,5 +16,4 @@ class ApplicationController < ActionController::API
   def set_default_format
     request.format = :json unless params[:format]
   end
-  
 end

@@ -1,0 +1,1 @@
+json.partial! "stream", stream: @stream

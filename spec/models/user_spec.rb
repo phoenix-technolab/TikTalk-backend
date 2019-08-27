@@ -20,8 +20,6 @@
 #  lat              :float
 #  lng              :float
 #  can_reset        :boolean          default(FALSE)
-#  locker_value     :string
-#  locker_type      :integer
 #
 
 require 'rails_helper'

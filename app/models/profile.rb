@@ -28,6 +28,8 @@
 #  twilio_user_id           :string           default("")
 #  notifications            :json
 #  zodiac                   :integer          default("no_answer"), not null
+#  locker_value             :string
+#  locker_type              :integer
 #
 
 class Profile < ApplicationRecord

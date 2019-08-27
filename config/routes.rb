@@ -51,6 +51,12 @@ Rails.application.routes.draw do
           post :decline_call
         end
       end
+
+      resources :streams, only: %I(index create) do 
+        collection do 
+          post :callback
+        end
+      end
     end
   end
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html

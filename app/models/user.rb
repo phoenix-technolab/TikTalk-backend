@@ -20,22 +20,26 @@
 #  lat              :float
 #  lng              :float
 #  can_reset        :boolean          default(FALSE)
-#  locker_value     :string
-#  locker_type      :integer
 #
 
 class User < ApplicationRecord
   acts_as_mappable default_units: :kms
 
-  has_many :attachments, dependent: :destroy
-  has_one :profile, dependent: :destroy
-  has_many :reports
-  has_many :complaints, class_name: 'Report', foreign_key: 'receiver_id'
-  has_many :like_dislikes
-  has_many :receives, class_name: 'LikeDislike', foreign_key: 'receiver_id'
-  has_many :block_users
-  has_many :blocked_by, class_name: 'BlockUser', foreign_key: 'receiver_id'
+  with_options dependent: :destroy do |assoc|
+    assoc.has_many :attachments
+    assoc.has_one  :profile
+    assoc.has_many :reports
+    assoc.has_many :complaints, class_name: 'Report', foreign_key: 'receiver_id'
+    assoc.has_many :like_dislikes
+    assoc.has_many :receives, class_name: 'LikeDislike', foreign_key: 'receiver_id'
+    assoc.has_many :block_users
+    assoc.has_many :blocked_by, class_name: 'BlockUser', foreign_key: 'receiver_id'
+    assoc.has_one  :stream
+    assoc.has_many :user_streams, foreign_key: :participant_id
+  end
 
+  has_many :participated_streams, through: :user_streams, source: :stream
+  
   after_create :create_profile
 
   enum gender: %I(male female)
