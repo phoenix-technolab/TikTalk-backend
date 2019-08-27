@@ -3,8 +3,8 @@
 # Table name: streams
 #
 #  id                 :bigint           not null, primary key
-#  lon                :string
-#  lat                :string
+#  lon                :float
+#  lat                :float
 #  user_id            :bigint
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
