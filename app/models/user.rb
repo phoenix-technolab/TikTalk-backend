@@ -95,7 +95,7 @@ class User < ApplicationRecord
     where.not(id:[array_receiver_ids])
   }
   def create_new_auth_token
-    new_token = generate_token
+    new_token   = generate_token
     self.tokens = tokens.push(new_token)
     new_token
   end
