@@ -21,29 +21,9 @@ class Api::V1::StreamsController < ApplicationController
     return render_error(result.message) unless result.success?
   end
 
-  def callback
-    classify_status = callback_params[:StatusCallbackEvent].underscore.classify
-
-    return if Stream::ROOM_TWILIO_STATUSES.exclude?(classify_status)
-
-    result = "Streams::Callbacks::#{classify_status}".constantize.call(
-      participant_email: callback_params[:ParticipantIdentity],
-      room_name:         callback_params[:RoomName]
-    )
-    return render_error(result.message) unless result.success?
-  end
-
   private
 
   def stream_params
     params.permit(:lon, :lat)
-  end
-
-  def callback_params
-    params.permit(
-      :ParticipantIdentity,
-      :StatusCallbackEvent, 
-      :RoomName
-    )
   end
 end

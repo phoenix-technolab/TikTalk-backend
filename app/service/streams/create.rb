@@ -21,7 +21,6 @@ class Streams::Create
     executed do |context|
       context.twilio_client.video.rooms.create(
         record_participants_on_connect: true,
-        status_callback: "#{ENV["HOST"]}/v1/streams/callback",
         type: 'group',
         unique_name: room_name(context.current_user)
       )
