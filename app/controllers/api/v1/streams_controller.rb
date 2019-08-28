@@ -5,9 +5,10 @@ class Api::V1::StreamsController < ApplicationController
       lon: stream_params[:lon]
     )
   end
-
+  
+  # TODO: change to popular
   def popular
-    @streams = Stream.popular
+    @streams = Stream.all #popular
   end
 
   def create
