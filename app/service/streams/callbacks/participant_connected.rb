@@ -21,6 +21,8 @@ class Streams::Callbacks::ParticipantConnected
       user_id             = context.room_name.split("\\").last
       context.participant = User.find_by(email: context.participant_email)
       context.stream       = User.find(user_id)&.stream
+
+      context.fail_and_return!("You have no active streams") if context.stream.nil?
     end
   end
 
