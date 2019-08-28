@@ -28,7 +28,7 @@ class Stream < ApplicationRecord
     within(1, :origin => [lat, lon])
   }
 
-  scope :popularity, lambda{|by_popularity|
+  scope :popular, lambda{
     where("participants_count >= 1")
   }
 end
