@@ -27,7 +27,7 @@ class Registration::FindExistUserByPhoneNumber::FindUser
   promises :user
 
   executed do |context|
-    context.user = User.where("CONCAT(code_country,phone_number) = ?", context.phone_number}).take
+    context.user = User.where("CONCAT(code_country,phone_number) = ?", context.phone_number).take
 
     next if context.user.blank?
 
