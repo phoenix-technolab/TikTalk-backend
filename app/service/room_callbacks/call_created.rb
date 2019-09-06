@@ -17,7 +17,8 @@ class RoomCallbacks::CallCreated
     promises :callee_email, :caller_email, :divider_count, :channel_sid
 
     executed do |context|
-      context.divider_count = context.room_name.count("\\")
+      divider_pattern       = context.room_name.match(/\\+/).to_s
+      context.divider_count = divider_pattern.count("\\")
       divider               = "\\" * (context.divider_count / 2)
       context.callee_email  = context.room_name.split(divider).first
       context.caller_email  = context.room_name.split(divider).second
