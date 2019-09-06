@@ -19,7 +19,7 @@ class RoomCallbacks::CallCreated
     executed do |context|
       divider_pattern       = context.room_name.match(/\\+/).to_s
       context.divider_count = divider_pattern.count("\\")
-      divider               = "\\" * (context.divider_count / 2)
+      divider               = "\\" * context.divider_count
       context.callee_email  = context.room_name.split(divider).first
       context.caller_email  = context.room_name.split(divider).second
       context.channel_sid   = context.room_name.split(divider).third
