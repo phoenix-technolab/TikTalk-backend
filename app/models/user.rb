@@ -46,6 +46,7 @@ class User < ApplicationRecord
 
   validates :gender, :email, :name, :birth_date, :country, :city, :phone_number, :code_country, presence: true
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }, uniqueness: { case_sensitive: false }
+  validates_uniqueness_of :phone_number, scope: :code_country
 
   scope :by_gender, lambda{ |current_user|
     prefer_gender_male = current_user.profile.prefer_gender_male
