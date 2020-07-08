@@ -53,7 +53,7 @@ module Api
 
       def twilio_user
         begin
-          @twilio_user = twilio_service(current_user.email).users.create(identity: current_user.email)
+          @twilio_user = @client.chat.services(twilio_service(current_user.email)).users.create(identity: current_user.email)
           current_user.profile.update(twilio_user_id: @twilio_user.sid)
         rescue Twilio::REST::RestError => e
           render_error(e.message)
