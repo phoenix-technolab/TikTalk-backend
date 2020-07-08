@@ -16,7 +16,6 @@ class Registration::SendVerifyCodeAndSaveInRedis::SendCodeToUser
   executed do |context|
     begin
       client = Twilio::REST::Client.new
-      puts "=======#{context.user_phone_number}"
       client.messages.create({
         from: ENV.fetch("TWILIO_PHONE_NUMBER"),
         to: context.user_phone_number,
