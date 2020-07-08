@@ -1,6 +1,7 @@
 module TwilioMethods
-  def twilio_service
-    twilio_client.chat.services(ENV.fetch("TWILIO_SERVICE_SID"))
+  def twilio_service(name)
+    # twilio_client.chat.services(ENV.fetch("TWILIO_SERVICE_SID"))
+    twilio_client.chat.services.create(friendly_name: name)
   end
 
   def twilio_client
