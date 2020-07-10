@@ -63,14 +63,23 @@ module Api
       def twilio_token
         grant = Twilio::JWT::AccessToken::ChatGrant.new
         grant.service_sid = ENV.fetch("TWILIO_SERVICE_SID")
-        token = Twilio::JWT::AccessToken.new(
-          ENV.fetch("TWILIO_ACCOUNT_SID"),
-          ENV.fetch("TWILIO_API_KEY"),
+        # token = Twilio::JWT::AccessToken.new(
+        #   ENV.fetch("TWILIO_ACCOUNT_SID"),
+        #   ENV.fetch("TWILIO_API_KEY"),
+        #   ENV.fetch("TWILIO_API_SECRET"),
+        #   [grant],
+        #   identity: current_user.email,
+        #   ttl: 1.hour.to_i
+        # )
+        token = Twilio::Util::AccessToken.new
+          ( ENV.fetch("TWILIO_ACCOUNT_SID"), 
+          ENV.fetch("TWILIO_API_KEY"), 
           ENV.fetch("TWILIO_API_SECRET"),
-          [grant],
-          identity: current_user.email,
-          ttl: 1.hour.to_i
-        )
+          3600,
+          identity: current_user.email )
+        grant = Twilio::Util::AccessToken::IpMessagingGrant.new
+        grant.service_sid = service_sid
+        token.add_grant grant
         render json: { token: token.to_jwt }
       end
 
