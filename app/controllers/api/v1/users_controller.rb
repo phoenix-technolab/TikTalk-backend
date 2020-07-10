@@ -62,7 +62,8 @@ module Api
 
       def twilio_token
         grant = Twilio::JWT::AccessToken::ChatGrant.new
-        grant.service_sid = ENV.fetch("TWILIO_SERVICE_SID")
+        # grant.service_sid = ENV.fetch("TWILIO_SERVICE_SID")
+        grant.service_sid = twilio_service(current_user.email).sid
         token = Twilio::JWT::AccessToken.new(
           ENV.fetch("TWILIO_ACCOUNT_SID"),
           ENV.fetch("TWILIO_API_KEY"),
