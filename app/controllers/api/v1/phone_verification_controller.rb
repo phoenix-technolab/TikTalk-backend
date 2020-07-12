@@ -16,8 +16,9 @@ module Api
         result = Registration::FindExistUserByPhoneNumber.call(verify_params[:code])
         if result.success?
           @user = result.user
+          puts "=====#{@user.as_json}"
           response.headers['Auth-token'] = result.user.tokens.last
-          render status: 201
+          render json: {message: result.message[:message], user: @user}, status: 201
         else
           render json: { message: result.message[:message] }, status: result.message[:status]
         end
