@@ -37,8 +37,8 @@ class Registration::FindExistUserByPhoneNumber::FindUser
 
     if context.user.present?
       context.user.create_new_auth_token
+      # context.skip_remaining!
       context.user.save
-      context.skip_remaining!
     end
   end
 end
