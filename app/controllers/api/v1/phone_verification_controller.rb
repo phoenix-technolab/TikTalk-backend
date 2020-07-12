@@ -14,12 +14,22 @@ module Api
 
       def verify_code
         result = Registration::FindExistUserByPhoneNumber.call(verify_params[:code])
-        if result.success?
-          @user = result.user
-          response.headers['Auth-token'] = result.user.tokens.last
-          render json: {message: result.message[:message], user: @user}, status: 201
-        else
-          render json: { message: result.message[:message], user: result.user }, status: result.message[:status]
+        # if result.success?
+        #   @user = result.user
+        #   response.headers['Auth-token'] = result.user.tokens.last
+        #   render json: {message: result.message[:message], user: @user}, status: 201
+        # else
+        #   render json: { message: result.message[:message], user: result.user }, status: result.message[:status]
+        # end
+        phone_number = MyRedis.client.get(verify_params[:code])
+        puts "====phone_number==#{phone_number}"
+        @user = User.where("CONCAT(phone_number) = ?", phone_number).take
+        if @user.present? && @user.is_account_block
+          render json: { message: "Your account has been blocked. For more info Contact Support", status: 403 }
+        elsif @user.present?
+          @user.create_new_auth_token
+          @user.save
+          render json: {message: "Welcome back #{@user.name}", user: @user}
         end
       end
 
