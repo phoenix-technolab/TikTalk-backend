@@ -23,10 +23,11 @@ module Api
         #   render json: { message: result.message[:message], user: @user }, status: result.message[:status]
         # end
         phone_number = MyRedis.client.get(verify_params[:code])
+        puts "====phone_number==#{phone_number}"
         user = User.where("CONCAT(code_country,phone_number) = ?", phone_number).take
         if user.present? && user.is_account_block
           render json: { message: "Your account has been blocked. For more info Contact Support", status: 403 }
-        else
+        elsif user.present?
           user.create_new_auth_token
           user.save
           render json: {message: "Welcome back #{user.name}", user: user}
