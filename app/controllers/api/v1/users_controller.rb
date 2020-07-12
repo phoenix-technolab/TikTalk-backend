@@ -36,7 +36,7 @@ module Api
         result = Users::CreateUserWithPhotos.call(user_params, images_params)
         if result.success?
           @user = result.user
-          response.headers["Auth-token"] = @user.tokens.first
+          response.headers["Auth-token"] = @user.tokens.last
         else
           render json: { error: result.message[:errors] }, status: result.message[:status]
         end
