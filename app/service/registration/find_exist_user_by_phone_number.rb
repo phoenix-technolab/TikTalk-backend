@@ -16,14 +16,14 @@ class Registration::FindExistUserByPhoneNumber::VerifyPhoneNumber
   executed do |context|
     context.phone_number = MyRedis.client.get(context.code)
     next if context.phone_number.present?
-    
+
     context.fail_and_return!({ message: "Incorrect code", status: 400 })
   end
 end
 
 class Registration::FindExistUserByPhoneNumber::FindUser
   extend LightService::Action
-  expects :phone_number  
+  expects :phone_number
   promises :user
 
   executed do |context|
@@ -32,7 +32,7 @@ class Registration::FindExistUserByPhoneNumber::FindUser
     next if context.user.blank?
 
     if context.user&.is_account_block
-      context.fail_and_return!({ message: "Your account has been blocked. For more info Contact Support", status: 403 }) 
+      context.fail_and_return!({ message: "Your account has been blocked. For more info Contact Support", status: 403 })
     end
 
     if context.user.present?
@@ -46,9 +46,10 @@ end
 class Registration::FindExistUserByPhoneNumber::PhoneNumberVerifiedSuccess
   extend LightService::Action
   expects :phone_number
+  promises :user
 
   executed do |context|
-    MyRedis.client.set(context.phone_number, true, { ex: 1.hour.to_i }) 
-    context.fail_and_return!({ message: "Phone number verified", status: 200 })
+    MyRedis.client.set(context.phone_number, true, { ex: 1.hour.to_i })
+    context.fail_and_return!({ message: "Phone number verified", user: context.user, status: 200 })
   end
 end
