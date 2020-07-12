@@ -3,8 +3,8 @@ class Registration::FindExistUserByPhoneNumber
   def self.call(code)
     with(code: code).reduce(
       Registration::FindExistUserByPhoneNumber::VerifyPhoneNumber,
-      Registration::FindExistUserByPhoneNumber::FindUser
-      # Registration::FindExistUserByPhoneNumber::PhoneNumberVerifiedSuccess
+      Registration::FindExistUserByPhoneNumber::FindUser,
+      Registration::FindExistUserByPhoneNumber::PhoneNumberVerifiedSuccess
       )
   end
 end
