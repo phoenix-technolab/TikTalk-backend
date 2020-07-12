@@ -20,7 +20,7 @@ module Api
           response.headers['Auth-token'] = result.user.tokens.last
           render json: {message: result.message[:message], user: @user}, status: 201
         else
-          render json: { message: result.message[:message] }, status: result.message[:status]
+          render json: { message: result.message[:message], user: @user }, status: result.message[:status]
         end
       end
 
