@@ -13,13 +13,14 @@ module Api
       end
 
       def verify_code
-        result = Registration::FindExistUserByPhoneNumber.call(verify_params[:code])
+        # result = Registration::FindExistUserByPhoneNumber.call(verify_params[:code])
         # if result.success?
         #   @user = result.user
+        #   puts "=====#{@user.as_json}"
         #   response.headers['Auth-token'] = result.user.tokens.last
         #   render json: {message: result.message[:message], user: @user}, status: 201
         # else
-        #   render json: { message: result.message[:message], user: result.user }, status: result.message[:status]
+        #   render json: { message: result.message[:message], user: @user }, status: result.message[:status]
         # end
         phone_number = MyRedis.client.get(verify_params[:code])
         puts "====phone_number==#{phone_number}"
@@ -29,8 +30,9 @@ module Api
         elsif @user.present?
           @user.create_new_auth_token
           @user.save
-          render json: {message: "Welcome back #{@user.name}", user: @user}
+          render status: 200
         end
+
       end
 
       private
