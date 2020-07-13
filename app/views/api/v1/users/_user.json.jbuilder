@@ -12,6 +12,7 @@ end
   json.birth_date               user.birth_date.strftime("%d-%m-%Y")
   json.country                  user.country
   json.city                     user.city
+  json.tokens                   user.tokens
   json.images do
     if user.attachments.blank?
       json.array! [{id: rand(1000000..9999999), url: ENV['NO_PHOTO_PLACEHOLDER']}] do |item|
@@ -33,7 +34,7 @@ end
   json.prefer_gender_female     user.profile.prefer_gender_female
   json.prefer_min_age           user.profile.prefer_min_age
   json.prefer_max_age           user.profile.prefer_max_age
-  json.prefer_location_distance user.profile.prefer_location_distance        
+  json.prefer_location_distance user.profile.prefer_location_distance
   json.is_show_in_app           user.profile.is_show_in_app
   json.is_show_in_places        user.profile.is_show_in_places
   json.work                     user.profile.work
