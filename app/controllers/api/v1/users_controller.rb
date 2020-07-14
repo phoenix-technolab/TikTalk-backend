@@ -2,7 +2,7 @@ module Api
   module V1
     class UsersController < ApplicationController
       skip_before_action :authentication!, only: [:status_with_email, :auth]
-      
+
       def show
         @user = User.find(params[:id])
       end
@@ -19,7 +19,7 @@ module Api
 
       def friends
         @users = User.where(
-          "CONCAT(code_country,phone_number) IN (:numbers)", 
+          "CONCAT(code_country,phone_number) IN (:numbers) OR phone_number IN (:numbers)",
           numbers: friends_params[:friends].map{|f| f.values.reduce(:+)}
         )
       end
@@ -28,7 +28,7 @@ module Api
         current_user.update!(
           firebase_token: user_params[:firebase_token]
         )
-        
+
         render json: { firebase_token: current_user.firebase_token }
       end
 
